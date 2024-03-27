@@ -122,7 +122,7 @@ In order to disconnect, the same request should be sent with the value of `state
 
 - *Encrypt the external key.*
 
-First, encrypt the external key of your thing using AES encryption. The encryption key is specified by the `MG_BOOTSTRAP_ENCRYPT_KEY` environment variable. Use a library or utility that supports AES encryption to do this. Here's an example of how to encrypt using go:
+First, encrypt the external key of your thing using AES encryption. The encryption key is specified by the `MG_BOOTSTRAP_ENCRYPT_KEY` environment variable. Use a library or utility that supports AES encryption to do this. Here's an example of how to encrypt using GO:
 
 ```go
 package main
@@ -177,6 +177,7 @@ Replace `<external_key>` and `<crypto_key>` with the thing's external key and `M
 
 
 Once the key is encrypted, make a request to the Bootstrap service. Here's how to do this using `curl`:
+
 ```bash
 curl --location 'http://localhost:9013/things/bootstrap/secure/<external_id>' \
 --header 'Accept: application/json' \
@@ -193,7 +194,7 @@ curl --location 'http://localhost:9013/things/bootstrap/secure/<external_id>' \
 
 - *Decrypt the response*
 
-Finally, decrypt the response using a function. Here's an example of how to do this using go:
+Finally, decrypt the response using a function. Here's an example of how to do this using GO:
 
 ```go
 package main

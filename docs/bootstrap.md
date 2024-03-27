@@ -120,11 +120,9 @@ In order to disconnect, the same request should be sent with the value of `state
 
 ### Using curl request for secure bootstrap configuration
 
-Here is a guide on how to get secure bootstrap configuration.
-
 - *Encrypt the external key.*
 
-First, you need to encrypt the external key of your thing using AES encryption. The encryption key is specified by the `MG_BOOTSTRAP_ENCRYPT_KEY` environment variable. You can use a library or utility that supports AES encryption to do this. Here's an example of how you encrypt using golang:
+First, encrypt the external key of your thing using AES encryption. The encryption key is specified by the `MG_BOOTSTRAP_ENCRYPT_KEY` environment variable. Use a library or utility that supports AES encryption to do this. Here's an example of how to encrypt using golang:
 ```bash
 package main
 
@@ -172,19 +170,19 @@ func main() {
 }
 ```
 
-Replace `<external_key>` and `<crypto_key>` with your thing's external key and `MG_BOOTSTRAP_ENCRYPT_KEY` respectively.
+Replace `<external_key>` and `<crypto_key>` with the thing's external key and `MG_BOOTSTRAP_ENCRYPT_KEY` respectively.
 
 - *Make a request to the bootstrap service.*
 
 
-Once you have the encrypted external key, you can make a request to the Bootstrap service. Here's how you can do this using `curl`:
+Once the key is encrypted, make a request to the Bootstrap service. Here's how to do this using `curl`:
 ```bash
 curl --location 'http://localhost:9013/things/bootstrap/secure/<external_id>' \
 --header 'Accept: application/json' \
 --header 'authorization: Thing <encyrpted_external_key>' --output -
 ```
 
-The response from the Bootstrap service will be in encrypted binary format. You can store this response in a file for later use.
+The response from the Bootstrap service will be in encrypted binary format. Store this response in a file for later use.
 
 ```bash
 curl --location 'http://localhost:9013/things/bootstrap/secure/<external_id>' \
@@ -194,7 +192,7 @@ curl --location 'http://localhost:9013/things/bootstrap/secure/<external_id>' \
 
 - *Decrypt the response*
 
-Finally, you can decrypt the response using a function. Here's an example of how you can do this using golang:
+Finally, decrypt the response using a function. Here's an example of how to do this using golang:
 
 ```bash
 package main
@@ -236,12 +234,9 @@ func main() {
 }
 ```
 
->Note: If you are making the request via the Magistrala CLI, this process is not required.
-
-
 ### Using Magistrala CLI for secure bootstrap configuration
 
-If you prefer to use the Magistrala CLI for the secure bootstrap configuration, you can do so with the following command:
+To use Magistrala CLI for the secure bootstrap configuration, use  the following command:
 
 ```bash
 magistrala_cli bootstrap secure <external_id> <external_key> <crypto_key>

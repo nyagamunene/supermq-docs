@@ -207,7 +207,6 @@ import (
 )
 
 func main() {
-
 	encodedData, err := os.ReadFile("~/<desired\>/<path\>/<enc_file_name.txt>")
 	if err != nil {
 		log.Fatal(err)
@@ -238,7 +237,7 @@ func main() {
 
 ### Using Magistrala CLI for secure bootstrap configuration
 
-To use Magistrala CLI for the secure bootstrap configuration, use  the following command:
+To use Magistrala CLI for the secure bootstrap configuration, use the following command:
 
 ```bash
 magistrala_cli bootstrap secure <external_id> <external_key> <crypto_key>

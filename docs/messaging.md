@@ -1,11 +1,20 @@
 # Messaging
 
-Once a channel is provisioned and thing is connected to it, it can start to publish messages on the channel. The following sections will provide an example of message publishing for each of the supported protocols.
+Once a channel is provisioned and thing is connected to it, it can start to publish messages on the channel. The following sections will provide an example of message publishing for each of the supported protocols, with the examples being shown without TLS, with TLS, and with mTLS.
 
 ## HTTP
 
-To publish message over channel, thing should send following request:
+The following environmental variables are used to enable or disable HTTP with TLS and MTLS: `MG_HTTP_ADAPTER_CERT_FILE`,`MG_HTTP_ADAPTER_KEY_FILE`, `MG_HTTP_ADAPTER_SERVER_CA_FILE`, `MG_HTTP_ADAPTER_CLIENT_CA_FILE`, `MG_HTTP_ADAPTER_CERT_VERIFICATION_METHODS`, `MG_HTTP_ADAPTER_OCSP_RESPONDER_URL`. These can be located in the `docker/.env` file.
+### Without TLS
 
+To use magistala http without TLS, comment out all of the listed environment variables provided above. To publish message over channel, thing should send following request:
+```bash
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" https://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+```
+
+### With TLS
+
+To use magistala http with TLS, uncomment the following environment variables`MG_HTTP_ADAPTER_CERT_FILE`,`MG_HTTP_ADAPTER_KEY_FILE` and comment out the rest.To publish message over channel, thing should send following request:
 ```bash
 curl -s -S -i --cacert docker/ssl/certs/ca.crt -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" https://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
@@ -17,18 +26,49 @@ For more information about the HTTP messaging service API, please check out the 
 ## MQTT
 
 To send and receive messages over MQTT you could use [Mosquitto tools][mosquitto], or [Paho][paho] if you want to use MQTT over WebSocket.
+The following environmental variables are used to enable or disable MQTT with TLS and MTLS: `MG_MQTT_ADAPTER_CERT_FILE`, `MG_MQTT_ADAPTER_KEY_FILE`, `MG_MQTT_ADAPTER_SERVER_CA_FILE`, `MG_MQTT_ADAPTER_CLIENT_CA_FILE`, `MG_MQTT_ADAPTER_CERT_VERIFICATION_METHODS`, `MG_MQTT_ADAPTER_OCSP_RESPONDER_URL`.
 
-To publish message over channel, thing should call following command:
+### Without TLS
+
+To use magistala mqtt without TLS, comment all of the listed environment variables provided above. To publish message over channel, thing should call following command:
 
 ```bash
-mosquitto_pub -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+mosquitto_pub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
 
 To subscribe to channel, thing should call following command:
 
 ```bash
-mosquitto_sub -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost
+mosquitto_sub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost
 ```
+
+### With TLS
+
+To use magistala mqtt with TLS, uncomment the following environment variables: `MG_MQTT_ADAPTER_CERT_FILE`, `MG_MQTT_ADAPTER_KEY_FILE` and comment out the rest. To publish message over channel, thing should call following command:
+
+```bash
+mosquitto_pub --id-prefix magistrala --cafile docker/ssl/certs/ca.crt -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+```
+
+To subscribe to channel, thing should call following command:
+
+```bash
+mosquitto_sub --id-prefix magistrala --cafile docker/ssl/certs/ca.crt -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost
+```
+
+### With MTLS
+Uncomment out all of the above mentioned environment variables to enable MTLS certificates. Here is an example of how you would publish:
+```bash
+mosquitto_pub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' --cafile docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key
+
+```
+>The `thing.crt` and `thing.crt` can be genarated by running `make thing_cert`
+
+Here is how you would subscribe:
+```bash
+mosquitto_sub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost --cafile docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key
+```
+
 
 If you want to use standard topic such as `channels/<channel_id>/messages` with SenML content type (JSON or CBOR), you should use following topic `channels/<channel_id>/messages`.
 
@@ -185,6 +225,8 @@ i.e. connection URL should be `ws://<host_addr>/mqtt`.
 
 For quick testing you can use [HiveMQ UI tool][websocket-client].
 
+The following environmental variables are used to enable or disable MQTT-over-WS with TLS and MTLS: `MG_MQTT_ADAPTER_WS_CERT_FILE`,`MG_MQTT_ADAPTER_WS_KEY_FILE`, `MG_MQTT_ADAPTER_WS_SERVER_CA_FILE`, `MG_MQTT_ADAPTER_WS_CLIENT_CA_FILE`,`MG_MQTT_ADAPTER_WS_CERT_VERIFICATION_METHODS`, `MG_MQTT_ADAPTER_WS_OCSP_RESPONDER_URL`.
+
 Here is an example of a browser application connecting to Magistrala server and sending and receiving messages over WebSocket using MQTT.js library:
 
 ```javascript
@@ -245,6 +287,20 @@ client = new Paho.MQTT.Client(loc.hostname, Number(loc.port), "clientId");
 // Connect the client
 client.connect({ onSuccess: onConnect });
 ```
+## Mproxy
+
+### Without TLS
+Comment out all of the above mentioned environment variables to disable TLS certificates.
+Here is an example of how you would publish and subscribe:
+
+### With TLS
+Uncomment out the following environment variables: `MG_MQTT_ADAPTER_WS_CERT_FILE`,`MG_MQTT_ADAPTER_WS_KEY_FILE` and comment out the rest to enable TLS certificates.
+Here is an example of how you would publish and subscribe:
+
+### With MTLS
+Uncomment out all of the above mentioned environment variables to enable MTLS certificates.
+Here is an example of how you would publish and subscribe:
+
 
 ## Subtopics
 

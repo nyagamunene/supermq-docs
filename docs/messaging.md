@@ -19,6 +19,12 @@ To use magistala http with TLS, uncomment the following environment variables`MG
 curl -s -S -i --cacert docker/ssl/certs/ca.crt -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" https://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
 
+### With MTLS
+To use magistala http with MTLS, uncomment all of the environment variables listed above. To publish message over channel, thing should send following request:
+```bash
+curl -s -S -i --cacert docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" https://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+```
+
 Note that if you're going to use senml message format, you should always send messages as an array.
 
 For more information about the HTTP messaging service API, please check out the [API documentation][http-api].

@@ -11,7 +11,7 @@ The following environmental variables are used to enable or disable HTTP with TL
 To use magistala http without TLS, comment out all of the listed environment variables provided above. To publish message over channel, thing should send following request:
 
 ```bash
-curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" https://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" http://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
 
 ### With TLS
@@ -302,7 +302,7 @@ client = new Paho.MQTT.Client(loc.hostname, Number(loc.port), "clientId");
 client.connect({ onSuccess: onConnect });
 ```
 
-## Mproxy
+## Examples using Eclipse Paho lib in Go.
 
 ### Without TLS
 

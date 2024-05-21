@@ -4,10 +4,12 @@ Once a channel is provisioned and thing is connected to it, it can start to publ
 
 ## HTTP
 
-The following environmental variables are used to enable or disable HTTP with TLS and MTLS: `MG_HTTP_ADAPTER_CERT_FILE`,`MG_HTTP_ADAPTER_KEY_FILE`, `MG_HTTP_ADAPTER_SERVER_CA_FILE`, `MG_HTTP_ADAPTER_CLIENT_CA_FILE`, `MG_HTTP_ADAPTER_CERT_VERIFICATION_METHODS`, `MG_HTTP_ADAPTER_OCSP_RESPONDER_URL`. These can be located in the `docker/.env` file.
+The following environmental variables are used to enable or disable HTTP with TLS and MTLS: `MG_HTTP_ADAPTER_CERT_FILE`,`MG_HTTP_ADAPTER_KEY_FILE`, `MG_HTTP_ADAPTER_SERVER_CA_FILE`, `MG_HTTP_ADAPTER_CLIENT_CA_FILE`. These can be located in the `docker/.env` file.
+
 ### Without TLS
 
 To use magistala http without TLS, comment out all of the listed environment variables provided above. To publish message over channel, thing should send following request:
+
 ```bash
 curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" https://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
@@ -15,12 +17,15 @@ curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorizatio
 ### With TLS
 
 To use magistala http with TLS, uncomment the following environment variables`MG_HTTP_ADAPTER_CERT_FILE`,`MG_HTTP_ADAPTER_KEY_FILE` and comment out the rest.To publish message over channel, thing should send following request:
+
 ```bash
 curl -s -S -i --cacert docker/ssl/certs/ca.crt -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" https://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
 
 ### With MTLS
+
 To use magistala http with MTLS, uncomment all of the environment variables listed above. To publish message over channel, thing should send following request:
+
 ```bash
 curl -s -S -i --cacert docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" https://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
@@ -32,7 +37,7 @@ For more information about the HTTP messaging service API, please check out the 
 ## MQTT
 
 To send and receive messages over MQTT you could use [Mosquitto tools][mosquitto], or [Paho][paho] if you want to use MQTT over WebSocket.
-The following environmental variables are used to enable or disable MQTT with TLS and MTLS: `MG_MQTT_ADAPTER_CERT_FILE`, `MG_MQTT_ADAPTER_KEY_FILE`, `MG_MQTT_ADAPTER_SERVER_CA_FILE`, `MG_MQTT_ADAPTER_CLIENT_CA_FILE`, `MG_MQTT_ADAPTER_CERT_VERIFICATION_METHODS`, `MG_MQTT_ADAPTER_OCSP_RESPONDER_URL`.
+The following environmental variables are used to enable or disable MQTT with TLS and MTLS: `MG_MQTT_ADAPTER_CERT_FILE`, `MG_MQTT_ADAPTER_KEY_FILE`, `MG_MQTT_ADAPTER_SERVER_CA_FILE`, `MG_MQTT_ADAPTER_CLIENT_CA_FILE`.
 
 ### Without TLS
 
@@ -53,28 +58,31 @@ mosquitto_sub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels
 To use magistala mqtt with TLS, uncomment the following environment variables: `MG_MQTT_ADAPTER_CERT_FILE`, `MG_MQTT_ADAPTER_KEY_FILE` and comment out the rest. To publish message over channel, thing should call following command:
 
 ```bash
-mosquitto_pub --id-prefix magistrala --cafile docker/ssl/certs/ca.crt -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+mosquitto_pub --id-prefix magistrala --cafile docker/ssl/certs/ca.crt -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883 -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
 
 To subscribe to channel, thing should call following command:
 
 ```bash
-mosquitto_sub --id-prefix magistrala --cafile docker/ssl/certs/ca.crt -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost
+mosquitto_sub --id-prefix magistrala --cafile docker/ssl/certs/ca.crt -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883
 ```
 
 ### With MTLS
+
 Uncomment out all of the above mentioned environment variables to enable MTLS certificates. Here is an example of how you would publish:
+
 ```bash
-mosquitto_pub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' --cafile docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key
+mosquitto_pub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883 -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' --cafile docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key
 
 ```
->The `thing.crt` and `thing.crt` can be genarated by running `make thing_cert`
+
+> The `thing.crt` and `thing.crt` can be genarated by running `make thing_cert`
 
 Here is how you would subscribe:
-```bash
-mosquitto_sub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost --cafile docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key
-```
 
+```bash
+mosquitto_sub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883 --cafile docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key
+```
 
 If you want to use standard topic such as `channels/<channel_id>/messages` with SenML content type (JSON or CBOR), you should use following topic `channels/<channel_id>/messages`.
 
@@ -231,7 +239,7 @@ i.e. connection URL should be `ws://<host_addr>/mqtt`.
 
 For quick testing you can use [HiveMQ UI tool][websocket-client].
 
-The following environmental variables are used to enable or disable MQTT-over-WS with TLS and MTLS: `MG_MQTT_ADAPTER_WS_CERT_FILE`,`MG_MQTT_ADAPTER_WS_KEY_FILE`, `MG_MQTT_ADAPTER_WS_SERVER_CA_FILE`, `MG_MQTT_ADAPTER_WS_CLIENT_CA_FILE`,`MG_MQTT_ADAPTER_WS_CERT_VERIFICATION_METHODS`, `MG_MQTT_ADAPTER_WS_OCSP_RESPONDER_URL`.
+The following environmental variables are used to enable or disable MQTT-over-WS with TLS and MTLS: `MG_MQTT_ADAPTER_WS_CERT_FILE`,`MG_MQTT_ADAPTER_WS_KEY_FILE`, `MG_MQTT_ADAPTER_WS_SERVER_CA_FILE`, `MG_MQTT_ADAPTER_WS_CLIENT_CA_FILE`.
 
 Here is an example of a browser application connecting to Magistrala server and sending and receiving messages over WebSocket using MQTT.js library:
 
@@ -293,20 +301,344 @@ client = new Paho.MQTT.Client(loc.hostname, Number(loc.port), "clientId");
 // Connect the client
 client.connect({ onSuccess: onConnect });
 ```
+
 ## Mproxy
 
 ### Without TLS
+
 Comment out all of the above mentioned environment variables to disable TLS certificates.
-Here is an example of how you would publish and subscribe:
+Here is an example of how you would publish:
+
+```go
+package main
+
+import (
+	"crypto/tls"
+	"fmt"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+)
+
+var (
+    brokerAddress = "ws://localhost/mqtt"
+    thingID       = "1255616f-d9ff-4fb4-b2d9-f72a7c99438e"
+    thingSecret   = "91f6e004-9f9e-4f95-9b72-a04befbdf584"
+    channelID     = "17c1bb45-7dc7-44eb-a2b4-57a16e4bc05b"
+    topic		  = "channels/" + channelID + "/messages"
+)
+
+func main() {
+    opts := mqtt.NewClientOptions()
+    opts.AddBroker(brokerAddress)
+    opts.SetClientID(thingID)
+    opts.SetUsername(thingID)
+    opts.SetPassword(thingSecret)
+
+	client, err := Connect(opts, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	publish(client)
+    client.Disconnect(250)
+}
+
+func Connect(opts *mqtt.ClientOptions, tlsCfg *tls.Config) (mqtt.Client, error) {
+	fmt.Println("Connecting to broker")
+	if tlsCfg != nil {
+		opts.SetTLSConfig(tlsCfg)
+	}
+
+	client := mqtt.NewClient(opts)
+
+	if token := client.Connect(); token.Wait() && token.Error() != nil {
+		fmt.Println("Failed to connect to broker")
+		return client, token.Error()
+	}
+	return client, nil
+}
+
+func publish(client mqtt.Client) {
+	fmt.Println("Publishing message")
+    text := "MQTT over WS Demo"
+    token := client.Publish(topic, 0, false, text)
+    token.Wait()
+    if token.Error() != nil {
+        fmt.Printf("Failed to publish to topic")
+        panic(token.Error())
+    }
+}
+
+```
 
 ### With TLS
+
 Uncomment out the following environment variables: `MG_MQTT_ADAPTER_WS_CERT_FILE`,`MG_MQTT_ADAPTER_WS_KEY_FILE` and comment out the rest to enable TLS certificates.
-Here is an example of how you would publish and subscribe:
+Here is an example of how you would publish:
+
+```go
+package main
+
+import (
+	"crypto/tls"
+	"crypto/x509"
+	"errors"
+	"fmt"
+	"os"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+)
+
+var (
+	brokerAddress   = "wss://localhost/mqtt"
+	thingID         = "1255616f-d9ff-4fb4-b2d9-f72a7c99438e"
+	thingSecret     = "91f6e004-9f9e-4f95-9b72-a04befbdf584"
+	channelID       = "17c1bb45-7dc7-44eb-a2b4-57a16e4bc05b"
+	topic           = "channels/" + channelID + "/messages"
+	certFile        = ""
+	keyFile         = ""
+	serverCAFile    = "docker/ssl/certs/ca.crt"
+	clientCAFile    = ""
+	errLoadCerts    = errors.New("failed to load certificates")
+	errLoadServerCA = errors.New("failed to load Server CA")
+	errLoadClientCA = errors.New("failed to load Client CA")
+	errAppendCA     = errors.New("failed to append root ca tls.Config")
+)
+
+func main() {
+	opts := mqtt.NewClientOptions()
+	opts.AddBroker(brokerAddress)
+	opts.SetClientID(thingID)
+	opts.SetUsername(thingID)
+	opts.SetPassword(thingSecret)
+
+	tlsCfg, err := LoadTLS(certFile, keyFile, serverCAFile, clientCAFile)
+	if err != nil {
+		panic(err)
+	}
+
+	client, err := Connect(opts, tlsCfg)
+	if err != nil {
+		panic(err)
+	}
+
+	publish(client)
+	client.Disconnect(250)
+}
+
+func Connect(opts *mqtt.ClientOptions, tlsCfg *tls.Config) (mqtt.Client, error) {
+	if tlsCfg != nil {
+		opts.SetTLSConfig(tlsCfg)
+	}
+
+	client := mqtt.NewClient(opts)
+
+	if token := client.Connect(); token.Wait() && token.Error() != nil {
+		fmt.Println("Failed to connect to broker")
+		return client, token.Error()
+	}
+	return client, nil
+}
+
+func publish(client mqtt.Client) {
+	text := "MQTT over WS Demo"
+	token := client.Publish(topic, 0, false, text)
+	token.Wait()
+	if token.Error() != nil {
+		fmt.Printf("Failed to publish to topic")
+		panic(token.Error())
+	}
+}
+
+// Load return a TLS configuration that can be used in TLS servers
+func LoadTLS(certFile, keyFile, serverCAFile, clientCAFile string) (*tls.Config, error) {
+	tlsConfig := &tls.Config{}
+
+	// Load Certs and Key if available
+	if certFile != "" || keyFile != "" {
+		certificate, err := tls.LoadX509KeyPair(certFile, keyFile)
+		if err != nil {
+			return nil, errors.Join(errLoadCerts, err)
+		}
+		tlsConfig = &tls.Config{
+			Certificates: []tls.Certificate{certificate},
+		}
+		tlsConfig.ClientAuth = tls.RequireAndVerifyClientCert
+	}
+
+	// Load Server CA if available
+	rootCA, err := loadCertFile(serverCAFile)
+	if err != nil {
+		return nil, errors.Join(errLoadServerCA, err)
+	}
+	if len(rootCA) > 0 {
+		if tlsConfig.RootCAs == nil {
+			tlsConfig.RootCAs = x509.NewCertPool()
+		}
+		if !tlsConfig.RootCAs.AppendCertsFromPEM(rootCA) {
+			return nil, errAppendCA
+		}
+	}
+
+	// Load Client CA if available
+	clientCA, err := loadCertFile(clientCAFile)
+	if err != nil {
+		return nil, errors.Join(errLoadClientCA, err)
+	}
+	if len(clientCA) > 0 {
+		if tlsConfig.ClientCAs == nil {
+			tlsConfig.ClientCAs = x509.NewCertPool()
+		}
+		if !tlsConfig.ClientCAs.AppendCertsFromPEM(clientCA) {
+			return nil, errAppendCA
+		}
+	}
+	return tlsConfig, nil
+}
+
+func loadCertFile(certFile string) ([]byte, error) {
+	if certFile != "" {
+		return os.ReadFile(certFile)
+	}
+	return []byte{}, nil
+}
+
+```
 
 ### With MTLS
-Uncomment out all of the above mentioned environment variables to enable MTLS certificates.
-Here is an example of how you would publish and subscribe:
 
+Uncomment out all of the above mentioned environment variables to enable MTLS certificates.
+Here is an example of how you would publish:
+
+```go
+package main
+
+import (
+	"crypto/tls"
+	"crypto/x509"
+	"errors"
+	"fmt"
+	"os"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+)
+
+var (
+	brokerAddress   = "wss://localhost/mqtt"
+	thingID         = "1255616f-d9ff-4fb4-b2d9-f72a7c99438e"
+	thingSecret     = "91f6e004-9f9e-4f95-9b72-a04befbdf584"
+	channelID       = "17c1bb45-7dc7-44eb-a2b4-57a16e4bc05b"
+	topic           = "channels/" + channelID + "/messages"
+	certFile        = "ssl/certs/thing.crt"
+	keyFile         = "ssl/certs/thing.key"
+	serverCAFile    = "ssl/certs/ca.crt"
+	clientCAFile    = ""
+	errLoadCerts    = errors.New("failed to load certificates")
+	errLoadServerCA = errors.New("failed to load Server CA")
+	errLoadClientCA = errors.New("failed to load Client CA")
+	errAppendCA     = errors.New("failed to append root ca tls.Config")
+)
+
+func main() {
+	opts := mqtt.NewClientOptions()
+	opts.AddBroker(brokerAddress)
+	opts.SetClientID(thingID)
+	opts.SetUsername(thingID)
+	opts.SetPassword(thingSecret)
+
+	tlsCfg, err := LoadTLS(certFile, keyFile, serverCAFile, clientCAFile)
+	if err != nil {
+		panic(err)
+	}
+
+	client, err := Connect(opts, tlsCfg)
+	if err != nil {
+		panic(err)
+	}
+
+	publish(client)
+	client.Disconnect(250)
+}
+
+func Connect(opts *mqtt.ClientOptions, tlsCfg *tls.Config) (mqtt.Client, error) {
+	if tlsCfg != nil {
+		opts.SetTLSConfig(tlsCfg)
+	}
+
+	client := mqtt.NewClient(opts)
+
+	if token := client.Connect(); token.Wait() && token.Error() != nil {
+		fmt.Println("Failed to connect to broker")
+		return client, token.Error()
+	}
+	return client, nil
+}
+
+func publish(client mqtt.Client) {
+	text := "MQTT over WS Demo"
+	token := client.Publish(topic, 0, false, text)
+	token.Wait()
+	if token.Error() != nil {
+		fmt.Printf("Failed to publish to topic")
+		panic(token.Error())
+	}
+}
+
+// Load return a TLS configuration that can be used in TLS servers
+func LoadTLS(certFile, keyFile, serverCAFile, clientCAFile string) (*tls.Config, error) {
+	tlsConfig := &tls.Config{}
+
+	// Load Certs and Key if available
+	if certFile != "" || keyFile != "" {
+		certificate, err := tls.LoadX509KeyPair(certFile, keyFile)
+		if err != nil {
+			return nil, errors.Join(errLoadCerts, err)
+		}
+		tlsConfig = &tls.Config{
+			Certificates: []tls.Certificate{certificate},
+		}
+		tlsConfig.ClientAuth = tls.RequireAndVerifyClientCert
+	}
+
+	// Load Server CA if available
+	rootCA, err := loadCertFile(serverCAFile)
+	if err != nil {
+		return nil, errors.Join(errLoadServerCA, err)
+	}
+	if len(rootCA) > 0 {
+		if tlsConfig.RootCAs == nil {
+			tlsConfig.RootCAs = x509.NewCertPool()
+		}
+		if !tlsConfig.RootCAs.AppendCertsFromPEM(rootCA) {
+			return nil, errAppendCA
+		}
+	}
+
+	// Load Client CA if available
+	clientCA, err := loadCertFile(clientCAFile)
+	if err != nil {
+		return nil, errors.Join(errLoadClientCA, err)
+	}
+	if len(clientCA) > 0 {
+		if tlsConfig.ClientCAs == nil {
+			tlsConfig.ClientCAs = x509.NewCertPool()
+		}
+		if !tlsConfig.ClientCAs.AppendCertsFromPEM(clientCA) {
+			return nil, errAppendCA
+		}
+	}
+	return tlsConfig, nil
+}
+
+func loadCertFile(certFile string) ([]byte, error) {
+	if certFile != "" {
+		return os.ReadFile(certFile)
+	}
+	return []byte{}, nil
+}
+
+
+```
 
 ## Subtopics
 

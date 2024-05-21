@@ -1,6 +1,7 @@
 # Messaging
 
 Once a channel is provisioned and thing is connected to it, it can start to publish messages on the channel. The following sections will provide an example of message publishing for each of the supported protocols, with the examples being shown without TLS, with TLS, and with mTLS.
+> While using MTLS the `thing.crt` and `thing.crt` can be genarated by running `make thing_cert` while in the `docker/ssl` folder
 
 ## HTTP
 
@@ -76,7 +77,7 @@ mosquitto_pub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels
 
 ```
 
-> The `thing.crt` and `thing.crt` can be genarated by running `make thing_cert`
+
 
 Here is how you would subscribe:
 

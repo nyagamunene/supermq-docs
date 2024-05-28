@@ -5,30 +5,65 @@ Once a channel is provisioned and thing is connected to it, it can start to publ
 
 ## HTTP
 
-The following environmental variables are used to enable or disable HTTP with TLS and MTLS: `MG_HTTP_ADAPTER_CERT_FILE`,`MG_HTTP_ADAPTER_KEY_FILE`, `MG_HTTP_ADAPTER_SERVER_CA_FILE`, `MG_HTTP_ADAPTER_CLIENT_CA_FILE`. These can be located in the `docker/.env` file.
+The following environmental variables are used to enable or disable HTTP with TLS and MTLS: `MG_HTTP_ADAPTER_CERT_FILE`,`MG_HTTP_ADAPTER_KEY_FILE`, `MG_HTTP_ADAPTER_SERVER_CA_FILE`, `MG_HTTP_ADAPTER_CLIENT_CA_FILE`. These can be located in the `docker/.env` file. By default magistrala is set to run without TLS or MTLS enabled.
 
 ### Without TLS
 
-To use magistala HTTP without TLS, comment out all of the listed environment variables provided above. To publish message over channel, thing should send following request:
+To publish message over channel, thing should send following request:
 
 ```bash
 curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" http://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
+The response body should look something like:
+```bash
+HTTP/1.1 202 Accepted
+Server: nginx/1.25.4
+Date: Wed, 22 May 2024 16:59:26 GMT
+Content-Type: application/json
+Content-Length: 0
+Connection: keep-alive
+```
 
 ### With TLS
 
-To use magistala HTTP with TLS, uncomment the following environment variables`MG_HTTP_ADAPTER_CERT_FILE`,`MG_HTTP_ADAPTER_KEY_FILE` and comment out the rest.To publish message over channel, thing should send following request:
+To use magistala HTTP with TLS, set the following environment variables as follows:
+```bash
+MG_HTTP_ADAPTER_CERT_FILE=./ssl/certs/magistrala-server.crt
+MG_HTTP_ADAPTER_KEY_FILE=./ssl/certs/magistrala-server.key
+```
+Then update the line `proxy_pass http://http-adapter:${MG_HTTP_ADAPTER_PORT}/;` to `proxy_pass https://http-adapter:${MG_HTTP_ADAPTER_PORT}/;` in `docker/nginx/nginx-key.conf`.Then restart magistrala.
+To publish message over channel, thing should send following request:
 
 ```bash
 curl -s -S -i --cacert docker/ssl/certs/ca.crt -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" https://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
+The response body should look something like:
+```bash
+HTTP/2 202 
+server: nginx/1.25.4
+date: Tue, 28 May 2024 09:10:22 GMT
+content-type: application/json
+content-length: 0
+```
 
 ### With MTLS
 
-To use magistala HTTP with MTLS, uncomment all of the environment variables listed above. To publish message over channel, thing should send following request:
+To use magistala HTTP with MTLS, set the following environment variables as follows and restart magistrala:
+```bash 
+MG_HTTP_ADAPTER_CERT_FILE=./ssl/certs/magistrala-server.crt
+MG_HTTP_ADAPTER_KEY_FILE=./ssl/certs/magistrala-server.key
+MG_HTTP_ADAPTER_SERVER_CA_FILE=./ssl/certs/ca.crt
+MG_HTTP_ADAPTER_CLIENT_CA_FILE=./ssl/certs/ca.crt
+```
+To publish message over channel, thing should send following request:
 
 ```bash
 curl -s -S -i --cacert docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing <thing_secret>" https://localhost/http/channels/<channel_id>/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+```
+
+The response body should look something like:
+```bash
+
 ```
 
 Note that if you're going to use senml message format, you should always send messages as an array.
@@ -42,47 +77,99 @@ The following environmental variables are used to enable or disable MQTT with TL
 
 ### Without TLS
 
-To use magistala mqtt without TLS, comment all of the listed environment variables provided above. To publish message over channel, thing should call following command:
+To publish message over channel, thing should send following request:
 
 ```bash
-mosquitto_pub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+mosquitto_pub -i magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
 
-To subscribe to channel, thing should call following command:
+This is the expected logs on magistrala-mqtt:
+```bash
+{"time":"2024-05-22T17:40:26.460507725Z","level":"INFO","msg":"Accepted new client"}
+{"time":"2024-05-22T17:40:26.461947159Z","level":"INFO","msg":"connected with client_id magitrala100398"}
+{"time":"2024-05-22T17:40:26.482658303Z","level":"INFO","msg":"published with client_id magitrala100398 to the topic channels/17c1bb45-7dc7-44eb-a2b4-57a16e4bc05b/messages"}
+{"time":"2024-05-22T17:40:26.485183131Z","level":"ERROR","msg":"disconnected client_id magitrala100398 and username 91f6e004-9f9e-4f95-9b72-a04befbdf584"}
+```
+
+To subscribe to channel, thing should send following request:
 
 ```bash
-mosquitto_sub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost
+mosquitto_sub -i magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost
+```
+This is the expected logs on magistrala-mqtt:
+```bash
+{"time":"2024-05-22T17:34:08.779743250Z","level":"INFO","msg":"Accepted new client"}
+{"time":"2024-05-22T17:34:08.846790260Z","level":"INFO","msg":"connected with client_id magistrala93639"}
+{"time":"2024-05-22T17:34:08.932790249Z","level":"INFO","msg":"subscribed with client_id magistrala93639 to topics channels/17c1bb45-7dc7-44eb-a2b4-57a16e4bc05b/messages"}
+```
+When message is published the message is expected to be seen on the subscriber side like shown:
+```bash
+[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]
 ```
 
 ### With TLS
 
-To use magistala mqtt with TLS, uncomment the following environment variables: `MG_MQTT_ADAPTER_CERT_FILE`, `MG_MQTT_ADAPTER_KEY_FILE` and comment out the rest. To publish message over channel, thing should call following command:
+To use magistala mqtt with TLS, set the following environment variables:
 
+```bash 
+MG_MQTT_ADAPTER_CERT_FILE=./ssl/certs/magistrala-server.crt
+MG_MQTT_ADAPTER_KEY_FILE=./ssl/certs/magistrala-server.key
+```
+To publish message over channel, thing should send following request:
 ```bash
-mosquitto_pub --id-prefix magistrala --cafile docker/ssl/certs/ca.crt -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883 -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+mosquitto_pub -i magistrala --cafile docker/ssl/certs/ca.crt -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883 -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
 
-To subscribe to channel, thing should call following command:
+This is the expected logs on magistrala-mqtt:
+```bash
+{"time":"2024-05-27T07:28:05.550261589Z","level":"INFO","msg":"Accepted new client"}
+{"time":"2024-05-27T07:28:05.615021741Z","level":"INFO","msg":"connected with client_id magistrala32808"}
+{"time":"2024-05-27T07:28:05.668840909Z","level":"INFO","msg":"published with client_id magistrala32808 to the topic channels/dd5426b2-3ec8-4259-9a07-c2bbb7127ce7/messages"}
+{"time":"2024-05-27T07:28:05.669544477Z","level":"ERROR","msg":"disconnected client_id magistrala32808 and username 7abb9fa0-8700-4f9f-9e38-c93dd4bda017"}
+```
+
+To subscribe to channel, thing should send following request:
 
 ```bash
-mosquitto_sub --id-prefix magistrala --cafile docker/ssl/certs/ca.crt -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883
+mosquitto_sub -i magistrala --cafile docker/ssl/certs/ca.crt -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883
+```
+This is the expected logs on magistrala-mqtt:
+```bash
+{"time":"2024-05-27T07:33:36.517467526Z","level":"INFO","msg":"Accepted new client"}
+{"time":"2024-05-27T07:33:36.578444287Z","level":"INFO","msg":"connected with client_id magistrala38318"}
+{"time":"2024-05-27T07:33:36.590345981Z","level":"INFO","msg":"subscribed with client_id magistrala38318 to topics channels/dd5426b2-3ec8-4259-9a07-c2bbb7127ce7/messages"}
 ```
 
 ### With MTLS
 
-Uncomment out all of the above mentioned environment variables to enable MTLS certificates. Here is an example of how you would publish:
-
-```bash
-mosquitto_pub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883 -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' --cafile docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key
-
+To use magistala MQTT with MTLS, set the following environment variables as follows and restart magistrala:
+```bash 
+MG_MQTT_ADAPTER_CERT_FILE=./ssl/certs/magistrala-server.crt
+MG_MQTT_ADAPTER_KEY_FILE=./ssl/certs/magistrala-server.key
+MG_MQTT_ADAPTER_SERVER_CA_FILE=./ssl/certs/ca.crt
+MG_MQTT_ADAPTER_CLIENT_CA_FILE=./ssl/certs/ca.crt
 ```
-
-
-
-Here is how you would subscribe:
+To publish message over channel, thing should send following request:
+```bash
+mosquitto_pub -i magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883 -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' --cafile docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key
+```
+This is the expected logs on magistrala-mqtt:
+```bash
+{"time":"2024-05-27T07:43:25.03963452Z","level":"INFO","msg":"Accepted new client"}
+{"time":"2024-05-27T07:43:25.072298607Z","level":"INFO","msg":"connected with client_id magistrala48391"}
+{"time":"2024-05-27T07:43:25.092920495Z","level":"INFO","msg":"published with client_id magistrala48391 to the topic channels/dd5426b2-3ec8-4259-9a07-c2bbb7127ce7/messages"}
+{"time":"2024-05-27T07:43:25.094117867Z","level":"ERROR","msg":"disconnected client_id magistrala48391 and username 7abb9fa0-8700-4f9f-9e38-c93dd4bda017"}
+```
+To subscribe to channel, thing should send following request:
 
 ```bash
-mosquitto_sub --id-prefix magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883 --cafile docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key
+mosquitto_sub -i magistrala -u <thing_id> -P <thing_secret> -t channels/<channel_id>/messages -h localhost -p 1883 --cafile docker/ssl/certs/ca.crt --cert docker/ssl/certs/thing.crt --key docker/ssl/certs/thing.key
+```
+This is the expected logs on magistrala-mqtt:
+```bash
+{"time":"2024-05-27T07:48:27.617045744Z","level":"INFO","msg":"Accepted new client"}
+{"time":"2024-05-27T07:48:27.647008937Z","level":"INFO","msg":"connected with client_id magistrala53810"}
+{"time":"2024-05-27T07:48:27.660881053Z","level":"INFO","msg":"subscribed with client_id magistrala53810 to topics channels/dd5426b2-3ec8-4259-9a07-c2bbb7127ce7/messages"}
 ```
 
 If you want to use standard topic such as `channels/<channel_id>/messages` with SenML content type (JSON or CBOR), you should use following topic `channels/<channel_id>/messages`.
@@ -240,7 +327,7 @@ i.e. connection URL should be `ws://<host_addr>/mqtt`.
 
 For quick testing you can use [HiveMQ UI tool][websocket-client].
 
-The following environmental variables are used to enable or disable MQTT-over-WS with TLS and MTLS: `MG_MQTT_ADAPTER_WS_CERT_FILE`,`MG_MQTT_ADAPTER_WS_KEY_FILE`, `MG_MQTT_ADAPTER_WS_SERVER_CA_FILE`, `MG_MQTT_ADAPTER_WS_CLIENT_CA_FILE`.
+The following environment variables are used to enable or disable MQTT-over-WS with TLS and MTLS: `MG_MQTT_ADAPTER_WS_CERT_FILE`,`MG_MQTT_ADAPTER_WS_KEY_FILE`, `MG_MQTT_ADAPTER_WS_SERVER_CA_FILE`, `MG_MQTT_ADAPTER_WS_CLIENT_CA_FILE`.
 
 Here is an example of a browser application connecting to Magistrala server and sending and receiving messages over WebSocket using MQTT.js library:
 
@@ -307,8 +394,7 @@ client.connect({ onSuccess: onConnect });
 
 ### Without TLS
 
-Comment out all of the above mentioned environment variables to disable TLS certificates.
-Here is an example of how you would publish:
+Here is an example of a Go program connecting to Magistrala server and sending messages over MQTT without TLS using paho mqtt library:
 
 ```go
 package main
@@ -371,11 +457,22 @@ func publish(client mqtt.Client) {
 }
 
 ```
+This is the expected logs on magistrala-mqtt:
+```bash
+{"time":"2024-05-28T07:43:33.176947136Z","level":"INFO","msg":"connected with client_id da018f93-49fd-4409-9ede-70c718d336a0"}
+{"time":"2024-05-28T07:43:33.259267711Z","level":"INFO","msg":"published with client_id da018f93-49fd-4409-9ede-70c718d336a0 to the topic channels/dd5426b2-3ec8-4259-9a07-c2bbb7127ce7/messages"}
+{"time":"2024-05-28T07:43:33.26171184Z","level":"ERROR","msg":"disconnected client_id da018f93-49fd-4409-9ede-70c718d336a0 and username 7abb9fa0-8700-4f9f-9e38-c93dd4bda017"}
+```
+
 
 ### With TLS
 
-Uncomment out the following environment variables: `MG_MQTT_ADAPTER_WS_CERT_FILE`,`MG_MQTT_ADAPTER_WS_KEY_FILE` and comment out the rest to enable TLS certificates.
-Here is an example of how you would publish:
+To use magistrala MQTT-over-WS with TLS, set the following environment variables as follows and restart magistrala:
+```bash 
+MG_MQTT_ADAPTER_WS_CERT_FILE=./ssl/certs/magistrala-server.crt
+MG_MQTT_ADAPTER_WS_KEY_FILE=./ssl/certs/magistrala-server.key
+```
+To publish message over channel, thing should send following request:
 
 ```go
 package main
@@ -451,7 +548,7 @@ func publish(client mqtt.Client) {
 	}
 }
 
-// Load return a TLS configuration that can be used in TLS servers
+// LoadTLS return a TLS configuration that can be used in TLS servers
 func LoadTLS(certFile, keyFile, serverCAFile, clientCAFile string) (*tls.Config, error) {
 	tlsConfig := &tls.Config{}
 
@@ -508,8 +605,14 @@ func loadCertFile(certFile string) ([]byte, error) {
 
 ### With MTLS
 
-Uncomment out all of the above mentioned environment variables to enable MTLS certificates.
-Here is an example of how you would publish:
+To use magistrala MQTT-over-WS with MTLS, set the following environment variables as follows and restart magistrala:
+```bash 
+MG_MQTT_ADAPTER_WS_CERT_FILE=./ssl/certs/magistrala-server.crt
+MG_MQTT_ADAPTER_WS_KEY_FILE=./ssl/certs/magistrala-server.key
+MG_MQTT_ADAPTER_WS_SERVER_CA_FILE=./ssl/certs/ca.crt
+MG_MQTT_ADAPTER_WS_CLIENT_CA_FILE=./ssl/certs/ca.crt
+```
+To publish message over channel, thing should send following request:
 
 ```go
 package main

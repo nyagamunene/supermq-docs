@@ -22,9 +22,7 @@ In the rapidly evolving landscape of Industrial Internet of Things (IIoT), busin
 
 9. **Customizable and Extensible**: Magistrala's architecture allows for easy customization and extension to meet specific business needs.
 
-Certainly! Here's a more professional phrasing:
-
-**Please note:** Magistrala offers a variety of services, each detailed comprehensively in the [architecture documentation](../architecture.md).
+**Please note:** Magistrala offers a variety of services, each detailed comprehensively in the [architecture documentation][architecture].
 
 ## Getting Started with Magistrala
 
@@ -57,93 +55,7 @@ The platform offers multiple interaction options, including a CLI, SDK, HTTP API
 
 ### Using the CLI
 
-Magistrala's Command Line Interface (CLI) provides a powerful way to interact with the platform. Here are some basic operations with detailed explanations:
-
-- Create a user:
-
-```bash
-magistrala-cli users create John johndoe@example.com 12345678
-```
-
-   This command creates a new user named John with the email `johndoe@example.com` and password `12345678`.
-
-- Generate an access token:
-
-```bash
-magistrala-cli users token johndoe@example.com 12345678
-```
-
-   This generates an access token for the user, which is required for authentication in subsequent operations.
-
-   The access token can be set to an environmental variable to allow for easy use:
-
-```bash
-ACCESSTOKEN=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgxOTI2MTIsImlhdCI6MTcxODE4OTAxMiwiaXNzIjoibWFnaXN0cmFsYS5hdXRoIiwidHlwZSI6MCwidXNlciI6ImMxYjQ3OWQwLWEzNDYtNGZiYy1hN2FkLWVkNGFiNjcxYTIyZCJ9._Qlri9FN_E2vJLZIVQzyeeg9I_ggVRi_CKS52xlUD8YEkSKWkTlmr02WlKdhvR-aZzaDyudICLtCPtadMCGCzg
-```
-
-- Create a domain (workspace):
-
-```bash
-magistrala-cli domain create workspace alias $ACCESSTOKEN
-```
-
-   This creates a new domain similar to a "workspace" with an alias. The $ACCESSTOKEN is the token generated in the previous step.
-
-- Create a thing (device):
-
-```bash
-magistrala-cli things create '{"name":"Sensor1", "metadata":{"units":"cm"}}' $ACCESSTOKEN
-```
-
-   This creates a new thing named "Sensor1" with metadata specifying its units as centimeters.
-
-- Create a channel:
-
-```bash
-magistrala-cli channels create '{"name":"Distance"}' $ACCESSTOKEN
-```
-
-   This creates a new channel named "Distance" which can be used for communication.
-
-- Connect a thing to a channel:
-
-```bash
-magistrala-cli things connect $THINGID $CHANNELID $ACCESSTOKEN 
-```
-
-   This connects the previously created thing to the channel. $THINGID and $CHANNELID are environment variables used to store the Thing and Channel IDs, similar to how the access token is stored. These IDs are generated when the Thing and Channel are created.
-
-- Send a message:
-
-```bash
-magistrala-cli messages send $CHANNELID '[{"bn":"Dev1","n":"temp","v":20}, {"n":"hum","v":40}]' <thing_secret>
-```
-
-   This sends a message to the specified channel. The message contains temperature and humidity readings. Replace <thing_secret> with the secret of the thing.
-
-- Read messages:
-
-```bash
-magistrala-cli messages read $CHANNELID $ACCESSTOKEN
-```
-
-   This reads messages from the specified channel.
-
-You can also update a Thing's tags, secret, and metadata. Here's an example of how to do that:
-
-```bash
-magistrala-cli things update secret $THINGID $THINGSECRET $ACCESSTOKEN
-```
-
-Within your domain, you have the ability to invite or assign other users as members, guests, contributors, editors, or administrators. This allows you to grant varying levels of permissions to users over different entities. To assign a user to a domain, use the following command:
-
-```bash
-magistrala-cli domains assign users member '[<user_id>]' $DOMAINID $ACCESSTOKEN
-```
-
-**Note:** Assigning a user adds them automatically to the domain. However, if invited, the user will need to accept the invitation.
-
-There are many commands available through the CLI. For more information, run:
+Magistrala's Command Line Interface (CLI) provides a powerful way to interact with the platform. There are many commands available through the CLI. For more information, run:
 
 ```bash
 magistrala-cli --help
@@ -202,6 +114,116 @@ Flags:
 
 Use "magistrala-cli [command] --help" for more information about a command.
 ```
+
+Here are some basic operations with detailed explanations:
+
+- Create a user:
+
+```bash
+magistrala-cli users create John johndoe@example.com 12345678
+```
+
+   This command creates a new user named John with the email `johndoe@example.com` and password `12345678`.
+
+- Generate an access token:
+
+```bash
+magistrala-cli users token johndoe@example.com 12345678
+```
+
+   This generates an access token for the user, which is required for authentication in subsequent operations.
+
+   The access token can be set to an environmental variable to allow for easy use:
+
+```bash
+ACCESSTOKEN=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgxOTI2MTIsImlhdCI6MTcxODE4OTAxMiwiaXNzIjoibWFnaXN0cmFsYS5hdXRoIiwidHlwZSI6MCwidXNlciI6ImMxYjQ3OWQwLWEzNDYtNGZiYy1hN2FkLWVkNGFiNjcxYTIyZCJ9._Qlri9FN_E2vJLZIVQzyeeg9I_ggVRi_CKS52xlUD8YEkSKWkTlmr02WlKdhvR-aZzaDyudICLtCPtadMCGCzg
+```
+
+**Note:** The token last for 15 minutes before expiring and will need the user to get a new one.
+
+- Create a domain (workspace):
+
+```bash
+magistrala-cli domain create workspace alias $ACCESSTOKEN
+```
+
+   This creates a new domain with the name "workspace" with an alias. The $ACCESSTOKEN is the token generated in the previous step.
+
+Save the domain Id to use it for logging in:
+
+```bash
+DOMAINID=9a00bc60-2e07-4503-8144-a24e748175d0
+```
+
+To login into your workspace to generate the token with the domain ID attached:
+
+```bash
+magistrala-cli users token johndoe@example.com 12345678 $DOMAINID
+```
+
+**Note:** The access token will need to set to the environmental variable created earlier. While logged into your domain there are muliple things that can be done. Let go through some of them.
+
+- Create a thing (device):
+
+```bash
+magistrala-cli things create '{"name":"Sensor1", "metadata":{"units":"cm"}}' $ACCESSTOKEN
+```
+
+   This creates a new thing named "Sensor1" with metadata specifying its units as centimeters.
+
+- Create a channel:
+
+```bash
+magistrala-cli channels create '{"name":"Distance"}' $ACCESSTOKEN
+```
+
+   This creates a new channel named "Distance" which can be used for communication.
+
+- Connect a thing to a channel:
+
+```bash
+magistrala-cli things connect $THINGID $CHANNELID $ACCESSTOKEN 
+```
+
+   This connects the previously created thing to the channel. $THINGID and $CHANNELID are environment variables used to store the Thing and Channel IDs, similar to how the access token is stored. These IDs are generated when the Thing and Channel are created.
+
+- Send a message:
+
+```bash
+magistrala-cli messages send $CHANNELID '[{"bn":"Dev1","n":"temp","v":20}, {"n":"hum","v":40}]' <thing_secret>
+```
+
+   This sends a message to the specified channel. The message contains temperature and humidity readings. Replace <thing_secret> with the secret of the thing.
+
+**Note:** The secret for the thing can be specified during its creation. If not provided, it will be automatically generated by the platform. To view the generated secret, please access the profile as follows:
+
+```bash
+magistrala-cli things get $THINGID $ACCESSTOKEN
+```
+
+Please note that appropriate access control is required to view the thing's credentials. For more information, please refer to the [documentation][Authorization].
+
+- Read messages:
+
+```bash
+magistrala-cli messages read $CHANNELID $ACCESSTOKEN
+```
+
+   This reads messages from the specified channel.
+
+You can also update a Thing's tags, secret, and metadata. Here's an example of how to do that:
+
+```bash
+magistrala-cli things update secret $THINGID $THINGSECRET $ACCESSTOKEN
+```
+
+Within your domain, you have the ability to invite or assign other users as members, guests, contributors, editors, or administrators. This allows you to grant varying levels of permissions to users over different entities. To assign a user to a domain, use the following command:
+
+```bash
+magistrala-cli domains assign users member '[<user_id>]' $DOMAINID $ACCESSTOKEN
+```
+
+**Note:** Assigning a user adds them automatically to the domain. However, if invited, the user will need to accept the invitation.
 
 ### Using the API
 
@@ -505,6 +527,8 @@ We value your feedback and are committed to continually improving Magistrala to 
 
 IIoT, Open Source, IoT Platform, Industrial Automation, Remote Monitoring, MQTT, CoAP, WebSocket, Device Management, Scalability, Security, Docker, Go, Multi-Tenancy, Data Processing, Real-Time Analytics, Edge Computing, Sensor Networks, Industrial IoT, Connected Devices, IoT Middleware, Protocol Bridging, Cloud Platform, IoT Security, IoT Data Management, Customer Support, Community Engagement, Open Source Community, IIoT Support, Developer Resources
 
+[architecture]: https://docs.magistrala.abstractmachines.fr/architecture/
+[authorization]: https://docs.magistrala.abstractmachines.fr/authorization/#domain-viewer-with-channel-thing
 [magistrala-repo]: https://github.com/absmach/magistrala
 [mosquitto-site]: https://mosquitto.org/download/
 [swagger-docs]: https://docs.api.magistrala.abstractmachines.fr/

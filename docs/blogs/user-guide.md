@@ -1,6 +1,6 @@
 # Magistrala: Revolutionizing Industrial IoT with an Open Source Platform
 
-In the rapidly evolving landscape of Industrial Internet of Things (IIoT), businesses are constantly seeking robust, scalable, and secure solutions to manage their connected devices and data. Enter Magistrala, a cutting-edge open source IIoT platform that's changing the game for industrial automation and remote monitoring.
+In the world of Industrial Internet of Things (IIoT), businesses are always on the lookout for reliable, scalable, and secure ways to handle their connected devices and data. That's where Magistrala comes in—an open-source IIoT platform that's transforming the way we approach industrial automation and remote monitoring.
 
 ## Key Advantages of Magistrala
 
@@ -28,7 +28,7 @@ In the rapidly evolving landscape of Industrial Internet of Things (IIoT), busin
 
 Setting up Magistrala is straightforward. With Docker (version 26.0.0 and above) and Go (version 1.21 and above) installed on your system, you can clone the official GitHub repository and have the platform up and running in no time. Here's a quick guide to get you started:
 
-- Clone the Magistrala repository:
+- Clone the Magistrala repository and navigate to the newly created directory:
 
    ```bash
    git clone https://github.com/absmach/magistrala.git
@@ -43,15 +43,13 @@ Setting up Magistrala is straightforward. With Docker (version 26.0.0 and above)
 
 **Note:** This process will compile the binaries into the `<project_root>/build` directory. If the `$GOBIN` environment variable is set, the binaries will also be copied to the `go/bin` directory.
 
-To initiate the Magistrala Docker services, execute the following command from the project's root directory:
-
-- Start the Magistrala Docker services:
+To start Magistrala Docker services, execute the following command from the project's root directory:
 
    ```bash
    make run
    ```
 
-The platform offers multiple interaction options, including a CLI, SDK, HTTP API, and UI, catering to different user preferences and use cases.
+Magistrala offers multiple interaction options, including a CLI, SDK, HTTP API, and UI, catering to different user preferences and use cases.
 
 ### Using the CLI
 
@@ -161,7 +159,7 @@ To login into your workspace to generate the token with the domain ID attached:
 magistrala-cli users token johndoe@example.com 12345678 $DOMAINID
 ```
 
-**Note:** The access token will need to set to the environmental variable created earlier. While logged into your domain there are muliple things that can be done. Let go through some of them.
+**Note:** The access token will need to be set to the `ACCESSTOKEN` environmental variable created earlier. While logged into your domain, there are multiple operations that can be done. Let go through some of them.
 
 - Create a thing (device):
 

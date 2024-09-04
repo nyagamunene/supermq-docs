@@ -166,31 +166,7 @@ magistrala-cli users token johndoe@example.com 12345678 $DOMAINID
 - Create a thing (device):
 
 ```bash
-magistrala-cli things create '{"name":"Distance Sensor", "metadata":{"units":"cm"}}' $ACCESSTOKEN
-```
-
-   This creates a new thing named `Distance Sensor` with metadata specifying its units as `centimeters`.
-
-- Create a channel:
-
-```bash
-magistrala-cli channels create '{"name":"Distance"}' $ACCESSTOKEN
-```
-
-   This creates a new channel named "Distance" which can be used for communication.
-
-- Connect a thing to a channel:
-
-```bash
-magistrala-cli things connect $THINGID $CHANNELID $ACCESSTOKEN 
-```
-
-   This connects the previously created thing to the channel. $THINGID and $CHANNELID are environment variables used to store the Thing and Channel IDs, similar to how the access token is stored. These IDs are generated when the Thing and Channel are created.
-
-- Send a message:
-
-```bash
-magistrala-cli messages send $CHANNELID '{
+magistrala-cli things create '{
   "name": "Distance Sensor Assembly Line 1",
   "metadata": {
     "type": "sensor",
@@ -199,7 +175,7 @@ magistrala-cli messages send $CHANNELID '{
     "model": "DS-5000",
     "installation_date": "2024-01-15",
     "maintenance_due": "2025-01-15",
-    "communication_protocol": "Modbus",
+    "communication_protocol": "MQTT",
     "battery_level": 95,
     "unit": "mm",
     "sampling_interval": "100ms",
@@ -215,7 +191,64 @@ magistrala-cli messages send $CHANNELID '{
     "assembly",
     "quality-control"
   ]
-}' <thing_secret>
+  "credentials": {"secret": "65ca03bd-eb6b-420b-9d5d-46d459d4f71c"},
+  "status": "enabled"
+}' $ACCESSTOKEN
+```
+
+   This creates a new thing named `Distance Sensor` with metadata specifying its units as `centimeters`.
+
+- Create a channel:
+
+```bash
+magistrala-cli channels create '{
+  "name": "Assembly Line 1 Product Gap",
+  "description": "This is a channel for quality control distance sensors",
+  "metadata": {
+    "unit": "mm",
+    "sampling_interval": "100ms",
+    "data_type": "float",
+    "min_value": 0,
+    "max_value": 1000,
+    "precision": 0.1,
+    "threshold_warning": 50,
+    "threshold_critical": 25
+  }
+  "status": "enabled"
+}' $ACCESSTOKEN
+```
+
+   This creates a new channel named "Distance" which can be used for communication.
+
+- Connect a thing to a channel:
+
+```bash
+magistrala-cli things connect $THINGID $CHANNELID $ACCESSTOKEN 
+```
+
+   This connects the previously created thing to the channel. $THINGID and $CHANNELID are environment variables used to store the Thing and Channel IDs, similar to how the access token is stored. These IDs are generated when the Thing and Channel are created.
+
+- Send a message:
+
+```bash
+magistrala-cli messages send $CHANNELID '[
+  {
+    "bn": "DS-5000-AL1-001",
+    "n": "Distance_AssemblyLine1",
+    "u": "mm",
+    "v": 152.3
+  },
+  {
+    "n": "BatteryLevel",
+    "u": "%",
+    "v": 95
+  },
+  {
+    "n": "SignalStrength",
+    "u": "dBm",
+    "v": -65
+  }
+]' <thing_secret>
 ```
 
    This sends a message to the specified channel. The message contains temperature and humidity readings. Replace <thing_secret> with the secret of the thing.
@@ -322,12 +355,30 @@ curl --location 'http://localhost:9000/things' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJkb21haW4iOiIzNzFiMjM1MS0wMGQ3LTQ2OWUtYWY5YS02OTQzYWM1NzgwYTUiLCJleHAiOjE3MjQ3NTc3MjMsImlhdCI6MTcyNDc1NDEyMywiaXNzIjoibWFnaXN0cmFsYS5hdXRoIiwic3ViIjoiNWJiMGE0ZDYtZTc0Mi00NDc3LWJmZmQtNThlYzQ4NjBiMDUxIiwidHlwZSI6MCwidXNlciI6IjViYjBhNGQ2LWU3NDItNDQ3Ny1iZmZkLTU4ZWM0ODYwYjA1MSJ9.LmO_coGSgOk3Lm7ogxibPza3zFJI0eVM6t39__j2YpNkNvx7sxKC28FvP5m9bsT0Ta6IKySiz2MaXrQc-Nheqg' \
 --data '{
-  "name": "Distance Sensor",
+  "name": "Distance Sensor Assembly Line 1",
+  "metadata": {
+    "type": "sensor",
+    "location": "Assembly Line 1",
+    "manufacturer": "TechMeasure Inc.",
+    "model": "DS-5000",
+    "installation_date": "2024-01-15",
+    "maintenance_due": "2025-01-15",
+    "communication_protocol": "MQTT",
+    "battery_level": 95,
+    "unit": "mm",
+    "sampling_interval": "100ms",
+    "data_type": "float",
+    "min_value": 0,
+    "max_value": 1000,
+    "precision": 0.1,
+    "threshold_warning": 50,
+    "threshold_critical": 25
+  },
   "tags": [
-    "tag1",
-    "tag2"
-  ],
-  "metadata":{"units":"cm"}
+    "distance",
+    "assembly",
+    "quality-control"
+  ]
   "credentials": {"secret": "65ca03bd-eb6b-420b-9d5d-46d459d4f71c"},
   "status": "enabled"
 }'
@@ -338,12 +389,20 @@ curl --location 'http://localhost:9000/channels' \
 --header 'accept: application/json' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJkb21haW4iOiIzNzFiMjM1MS0wMGQ3LTQ2OWUtYWY5YS02OTQzYWM1NzgwYTUiLCJleHAiOjE3MjQ3NjE5ODEsImlhdCI6MTcyNDc1ODM4MSwiaXNzIjoibWFnaXN0cmFsYS5hdXRoIiwic3ViIjoiNWJiMGE0ZDYtZTc0Mi00NDc3LWJmZmQtNThlYzQ4NjBiMDUxIiwidHlwZSI6MCwidXNlciI6IjViYjBhNGQ2LWU3NDItNDQ3Ny1iZmZkLTU4ZWM0ODYwYjA1MSJ9.F4aS-VkJjDDo6iKAYG0M9kcXus6P8tC-onsTIaUSyaTgTWrdAhgeGlNN1RWzciDhpJ-w4EFHWd8OtB6WWai5pg' \
---data '{
-  "name": "Distance",
-  "description": "This is a channel for distance sensors",
+--data '
+{
+  "name": "Assembly Line 1 Product Gap",
+  "description": "This is a channel for quality control distance sensors",
   "metadata": {
-    "location": "Sirbea"
-  },
+    "unit": "mm",
+    "sampling_interval": "100ms",
+    "data_type": "float",
+    "min_value": 0,
+    "max_value": 1000,
+    "precision": 0.1,
+    "threshold_warning": 50,
+    "threshold_critical": 25
+  }
   "status": "enabled"
 }'
 ```
@@ -362,40 +421,24 @@ curl --location --request POST 'http://localhost:9000/channels/c4935742-1422-463
 curl --location 'http://localhost/http/channels/c4935742-1422-4636-9442-e7eeb7c8c681/messages' \
 --header 'Content-Type: application/senml+json' \
 --header 'Authorization: Thing 91f6e004-9f9e-4f95-9b72-a04befbdf584' \
---data '{
-  "name": "Distance Sensor Parking Level 2",
-  "metadata": {
-    "type": "sensor",
-    "location": "Parking Garage B, Level 2, Zone 3",
-    "manufacturer": "ParkTech Systems",
-    "model": "UDS-200",
-    "installation_date": "2024-02-20",
-    "maintenance_due": "2025-02-20",
-    "communication_protocol": "LoRaWAN",
-    "power_source": "Solar with battery backup",
-    "battery_level": 85,
-    "unit": "cm",
-    "sampling_interval": "500ms",
-    "data_type": "integer",
-    "min_value": 0,
-    "max_value": 300,
-    "precision": 1,
-    "threshold_occupied": 50,
-    "threshold_warning": 10,
-    "firmware_version": "3.2.1"
+--data '[
+  {
+    "bn": "DS-5000-AL1-001",
+    "n": "Distance_AssemblyLine1",
+    "u": "mm",
+    "v": 152.3
   },
-  "tags": [
-    "distance",
-    "parking",
-    "occupancy",
-    "vehicle-detection"
-  ],
-  "calibration": {
-    "last_calibration_date": "2024-02-25",
-    "calibration_due": "2024-08-25",
-    "calibration_offset": -2
+  {
+    "n": "BatteryLevel",
+    "u": "%",
+    "v": 95
+  },
+  {
+    "n": "SignalStrength",
+    "u": "dBm",
+    "v": -65
   }
-}'
+]'
 ```
 
 - To read the message, use a similar command:
@@ -518,7 +561,24 @@ coap-cli get channels/$CHANNELID/messages --auth $THINGSECRET -o
 - Publish a message:
 
 ```bash
-coap-cli post channels/$CHANNELID/messages -auth $THINGSECRET -d '[{"Voltage":"234.4", "type":"AC"}]'
+coap-cli post channels/$CHANNELID/messages -auth $THINGSECRET -d '[
+  {
+    "bn": "DS-5000-AL1-001",
+    "n": "Distance_AssemblyLine1",
+    "u": "mm",
+    "v": 152.3
+  },
+  {
+    "n": "BatteryLevel",
+    "u": "%",
+    "v": 95
+  },
+  {
+    "n": "SignalStrength",
+    "u": "dBm",
+    "v": -65
+  }
+]'
 ```
 
 This command sends a message to a specific channel. The `-d` parameter specifies the message content.
@@ -554,7 +614,24 @@ websocat --help
 Once Websocat is installed, you can use it with Magistrala:
 
 ```bash
-websocat "ws://localhost:8186/channels/$CHANNELID/messages?authorization=$THINGSECRET" <<< "Your message"
+websocat "ws://localhost:8186/channels/$CHANNELID/messages?authorization=$THINGSECRET" <<< '[
+  {
+    "bn": "DS-5000-AL1-001",
+    "n": "Distance_AssemblyLine1",
+    "u": "mm",
+    "v": 152.3
+  },
+  {
+    "n": "BatteryLevel",
+    "u": "%",
+    "v": 95
+  },
+  {
+    "n": "SignalStrength",
+    "u": "dBm",
+    "v": -65
+  }
+]'
 ```
 
 This command opens a WebSocket connection to a specific channel and sends a message. The URL includes the channel ID and Thing secret for authentication.
@@ -564,7 +641,24 @@ This command opens a WebSocket connection to a specific channel and sends a mess
 Here’s an example of how you can send a message using the HTTP adapter. To illustrate, you can use the following `curl` command:
 
 ```bash
-curl -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing $THINGSECRET" -d '[{"n":"temperature", "v":23.5, "u":"degC"}]' http://localhost:8008/http/channels/$CHANNELID/messages
+curl -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing $THINGSECRET" -d '[
+  {
+    "bn": "DS-5000-AL1-001",
+    "n": "Distance_AssemblyLine1",
+    "u": "mm",
+    "v": 152.3
+  },
+  {
+    "n": "BatteryLevel",
+    "u": "%",
+    "v": 95
+  },
+  {
+    "n": "SignalStrength",
+    "u": "dBm",
+    "v": -65
+  }
+]' http://localhost:8008/http/channels/$CHANNELID/messages
 ```
 
 This command sends a POST request to the Magistrala HTTP adapter, publishing a temperature reading to a specific channel. The Thing secret is used for authentication.

@@ -191,7 +191,6 @@ magistrala-cli things create '{
     "assembly",
     "quality-control"
   ]
-  "credentials": {"secret": "65ca03bd-eb6b-420b-9d5d-46d459d4f71c"},
   "status": "enabled"
 }' $ACCESSTOKEN
 ```
@@ -379,7 +378,6 @@ curl --location 'http://localhost:9000/things' \
     "assembly",
     "quality-control"
   ]
-  "credentials": {"secret": "65ca03bd-eb6b-420b-9d5d-46d459d4f71c"},
   "status": "enabled"
 }'
 ```

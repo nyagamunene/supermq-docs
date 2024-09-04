@@ -190,7 +190,7 @@ magistrala-cli things create '{
     "distance",
     "assembly",
     "quality-control"
-  ]
+  ],
   "status": "enabled"
 }' $ACCESSTOKEN
 ```
@@ -212,7 +212,7 @@ magistrala-cli channels create '{
     "precision": 0.1,
     "threshold_warning": 50,
     "threshold_critical": 25
-  }
+  },
   "status": "enabled"
 }' $ACCESSTOKEN
 ```
@@ -230,24 +230,7 @@ magistrala-cli things connect $THINGID $CHANNELID $ACCESSTOKEN
 - Send a message:
 
 ```bash
-magistrala-cli messages send $CHANNELID '[
-  {
-    "bn": "DS-5000-AL1-001",
-    "n": "Distance_AssemblyLine1",
-    "u": "mm",
-    "v": 152.3
-  },
-  {
-    "n": "BatteryLevel",
-    "u": "%",
-    "v": 95
-  },
-  {
-    "n": "SignalStrength",
-    "u": "dBm",
-    "v": -65
-  }
-]' <thing_secret>
+magistrala-cli messages send $CHANNELID '[{"bn": "DS-5000-AL1-001", "n": "Distance_AssemblyLine1", "u": "mm","v": 152.3}, { "n": "BatteryLevel", "u": "%", "v": 95}, { "n": "SignalStrength", "u": "dBm", "v": -65}]' <thing_secret>
 ```
 
    This sends a message to the specified channel. The message contains temperature and humidity readings. Replace <thing_secret> with the secret of the thing.
@@ -377,7 +360,7 @@ curl --location 'http://localhost:9000/things' \
     "distance",
     "assembly",
     "quality-control"
-  ]
+  ],
   "status": "enabled"
 }'
 ```
@@ -400,7 +383,7 @@ curl --location 'http://localhost:9000/channels' \
     "precision": 0.1,
     "threshold_warning": 50,
     "threshold_critical": 25
-  }
+  },
   "status": "enabled"
 }'
 ```
@@ -419,24 +402,7 @@ curl --location --request POST 'http://localhost:9000/channels/c4935742-1422-463
 curl --location 'http://localhost/http/channels/c4935742-1422-4636-9442-e7eeb7c8c681/messages' \
 --header 'Content-Type: application/senml+json' \
 --header 'Authorization: Thing 91f6e004-9f9e-4f95-9b72-a04befbdf584' \
---data '[
-  {
-    "bn": "DS-5000-AL1-001",
-    "n": "Distance_AssemblyLine1",
-    "u": "mm",
-    "v": 152.3
-  },
-  {
-    "n": "BatteryLevel",
-    "u": "%",
-    "v": 95
-  },
-  {
-    "n": "SignalStrength",
-    "u": "dBm",
-    "v": -65
-  }
-]'
+--data '[{"bn": "DS-5000-AL1-001", "n": "Distance_AssemblyLine1", "u": "mm","v": 152.3}, { "n": "BatteryLevel", "u": "%", "v": 95}, { "n": "SignalStrength", "u": "dBm", "v": -65}]'
 ```
 
 - To read the message, use a similar command:
@@ -492,24 +458,7 @@ mosquitto_sub -i magistrala -u $THINGID -P $THINGSECRET -t channels/$CHANNELID/m
 - Publish a message:
 
 ```bash
-mosquitto_pub -i magistrala -u $THINGID -P $THINGSECRET -t channels/$CHANNELID/messages -h localhost -p 1883 -m '[
-  {
-    "bn": "DS-5000-AL1-001",
-    "n": "Distance_AssemblyLine1",
-    "u": "mm",
-    "v": 152.3
-  },
-  {
-    "n": "BatteryLevel",
-    "u": "%",
-    "v": 95
-  },
-  {
-    "n": "SignalStrength",
-    "u": "dBm",
-    "v": -65
-  }
-]'
+mosquitto_pub -i magistrala -u $THINGID -P $THINGSECRET -t channels/$CHANNELID/messages -h localhost -p 1883 -m '[{"bn": "DS-5000-AL1-001", "n": "Distance_AssemblyLine1", "u": "mm","v": 152.3}, { "n": "BatteryLevel", "u": "%", "v": 95}, { "n": "SignalStrength", "u": "dBm", "v": -65}]'
 ```
 
 This command publishes a message to a specific channel. The parameters are similar to the subscribe command, with `-m` specifying the message content in SenML format.
@@ -559,24 +508,7 @@ coap-cli get channels/$CHANNELID/messages --auth $THINGSECRET -o
 - Publish a message:
 
 ```bash
-coap-cli post channels/$CHANNELID/messages -auth $THINGSECRET -d '[
-  {
-    "bn": "DS-5000-AL1-001",
-    "n": "Distance_AssemblyLine1",
-    "u": "mm",
-    "v": 152.3
-  },
-  {
-    "n": "BatteryLevel",
-    "u": "%",
-    "v": 95
-  },
-  {
-    "n": "SignalStrength",
-    "u": "dBm",
-    "v": -65
-  }
-]'
+coap-cli post channels/$CHANNELID/messages -auth $THINGSECRET -d '[{"bn": "DS-5000-AL1-001", "n": "Distance_AssemblyLine1", "u": "mm","v": 152.3}, { "n": "BatteryLevel", "u": "%", "v": 95}, { "n": "SignalStrength", "u": "dBm", "v": -65}]'
 ```
 
 This command sends a message to a specific channel. The `-d` parameter specifies the message content.
@@ -612,24 +544,7 @@ websocat --help
 Once Websocat is installed, you can use it with Magistrala:
 
 ```bash
-websocat "ws://localhost:8186/channels/$CHANNELID/messages?authorization=$THINGSECRET" <<< '[
-  {
-    "bn": "DS-5000-AL1-001",
-    "n": "Distance_AssemblyLine1",
-    "u": "mm",
-    "v": 152.3
-  },
-  {
-    "n": "BatteryLevel",
-    "u": "%",
-    "v": 95
-  },
-  {
-    "n": "SignalStrength",
-    "u": "dBm",
-    "v": -65
-  }
-]'
+websocat "ws://localhost:8186/channels/$CHANNELID/messages?authorization=$THINGSECRET" <<< '[{"bn": "DS-5000-AL1-001", "n": "Distance_AssemblyLine1", "u": "mm","v": 152.3}, { "n": "BatteryLevel", "u": "%", "v": 95}, { "n": "SignalStrength", "u": "dBm", "v": -65}]'
 ```
 
 This command opens a WebSocket connection to a specific channel and sends a message. The URL includes the channel ID and Thing secret for authentication.
@@ -639,24 +554,7 @@ This command opens a WebSocket connection to a specific channel and sends a mess
 Here’s an example of how you can send a message using the HTTP adapter. To illustrate, you can use the following `curl` command:
 
 ```bash
-curl -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing $THINGSECRET" -d '[
-  {
-    "bn": "DS-5000-AL1-001",
-    "n": "Distance_AssemblyLine1",
-    "u": "mm",
-    "v": 152.3
-  },
-  {
-    "n": "BatteryLevel",
-    "u": "%",
-    "v": 95
-  },
-  {
-    "n": "SignalStrength",
-    "u": "dBm",
-    "v": -65
-  }
-]' http://localhost:8008/http/channels/$CHANNELID/messages
+curl -X POST -H "Content-Type: application/senml+json" -H "Authorization: Thing $THINGSECRET" -d '[{"bn": "DS-5000-AL1-001", "n": "Distance_AssemblyLine1", "u": "mm","v": 152.3}, { "n": "BatteryLevel", "u": "%", "v": 95}, { "n": "SignalStrength", "u": "dBm", "v": -65}]' http://localhost:8008/http/channels/$CHANNELID/messages
 ```
 
 This command sends a POST request to the Magistrala HTTP adapter, publishing a temperature reading to a specific channel. The Thing secret is used for authentication.

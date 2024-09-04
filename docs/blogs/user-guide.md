@@ -166,10 +166,10 @@ magistrala-cli users token johndoe@example.com 12345678 $DOMAINID
 - Create a thing (device):
 
 ```bash
-magistrala-cli things create '{"name":"Sensor1", "metadata":{"units":"cm"}}' $ACCESSTOKEN
+magistrala-cli things create '{"name":"Distance Sensor", "metadata":{"units":"cm"}}' $ACCESSTOKEN
 ```
 
-   This creates a new thing named "Sensor1" with metadata specifying its units as centimeters.
+   This creates a new thing named `Distance Sensor` with metadata specifying its units as `centimeters`.
 
 - Create a channel:
 
@@ -190,7 +190,32 @@ magistrala-cli things connect $THINGID $CHANNELID $ACCESSTOKEN
 - Send a message:
 
 ```bash
-magistrala-cli messages send $CHANNELID '[{"bn":"Dev1","n":"temp","v":20}, {"n":"hum","v":40}]' <thing_secret>
+magistrala-cli messages send $CHANNELID '{
+  "name": "Distance Sensor Assembly Line 1",
+  "metadata": {
+    "type": "sensor",
+    "location": "Assembly Line 1",
+    "manufacturer": "TechMeasure Inc.",
+    "model": "DS-5000",
+    "installation_date": "2024-01-15",
+    "maintenance_due": "2025-01-15",
+    "communication_protocol": "Modbus",
+    "battery_level": 95,
+    "unit": "mm",
+    "sampling_interval": "100ms",
+    "data_type": "float",
+    "min_value": 0,
+    "max_value": 1000,
+    "precision": 0.1,
+    "threshold_warning": 50,
+    "threshold_critical": 25
+  },
+  "tags": [
+    "distance",
+    "assembly",
+    "quality-control"
+  ]
+}' <thing_secret>
 ```
 
    This sends a message to the specified channel. The message contains temperature and humidity readings. Replace <thing_secret> with the secret of the thing.
@@ -297,7 +322,7 @@ curl --location 'http://localhost:9000/things' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJkb21haW4iOiIzNzFiMjM1MS0wMGQ3LTQ2OWUtYWY5YS02OTQzYWM1NzgwYTUiLCJleHAiOjE3MjQ3NTc3MjMsImlhdCI6MTcyNDc1NDEyMywiaXNzIjoibWFnaXN0cmFsYS5hdXRoIiwic3ViIjoiNWJiMGE0ZDYtZTc0Mi00NDc3LWJmZmQtNThlYzQ4NjBiMDUxIiwidHlwZSI6MCwidXNlciI6IjViYjBhNGQ2LWU3NDItNDQ3Ny1iZmZkLTU4ZWM0ODYwYjA1MSJ9.LmO_coGSgOk3Lm7ogxibPza3zFJI0eVM6t39__j2YpNkNvx7sxKC28FvP5m9bsT0Ta6IKySiz2MaXrQc-Nheqg' \
 --data '{
-  "name": "Sensor1",
+  "name": "Distance Sensor",
   "tags": [
     "tag1",
     "tag2"
@@ -337,7 +362,40 @@ curl --location --request POST 'http://localhost:9000/channels/c4935742-1422-463
 curl --location 'http://localhost/http/channels/c4935742-1422-4636-9442-e7eeb7c8c681/messages' \
 --header 'Content-Type: application/senml+json' \
 --header 'Authorization: Thing 91f6e004-9f9e-4f95-9b72-a04befbdf584' \
---data '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+--data '{
+  "name": "Distance Sensor Parking Level 2",
+  "metadata": {
+    "type": "sensor",
+    "location": "Parking Garage B, Level 2, Zone 3",
+    "manufacturer": "ParkTech Systems",
+    "model": "UDS-200",
+    "installation_date": "2024-02-20",
+    "maintenance_due": "2025-02-20",
+    "communication_protocol": "LoRaWAN",
+    "power_source": "Solar with battery backup",
+    "battery_level": 85,
+    "unit": "cm",
+    "sampling_interval": "500ms",
+    "data_type": "integer",
+    "min_value": 0,
+    "max_value": 300,
+    "precision": 1,
+    "threshold_occupied": 50,
+    "threshold_warning": 10,
+    "firmware_version": "3.2.1"
+  },
+  "tags": [
+    "distance",
+    "parking",
+    "occupancy",
+    "vehicle-detection"
+  ],
+  "calibration": {
+    "last_calibration_date": "2024-02-25",
+    "calibration_due": "2024-08-25",
+    "calibration_offset": -2
+  }
+}'
 ```
 
 - To read the message, use a similar command:
@@ -393,7 +451,24 @@ mosquitto_sub -i magistrala -u $THINGID -P $THINGSECRET -t channels/$CHANNELID/m
 - Publish a message:
 
 ```bash
-mosquitto_pub -i magistrala -u $THINGID -P $THINGSECRET -t channels/$CHANNELID/messages -h localhost -p 1883 -m '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+mosquitto_pub -i magistrala -u $THINGID -P $THINGSECRET -t channels/$CHANNELID/messages -h localhost -p 1883 -m '[
+  {
+    "bn": "DS-5000-AL1-001",
+    "n": "Distance_AssemblyLine1",
+    "u": "mm",
+    "v": 152.3
+  },
+  {
+    "n": "BatteryLevel",
+    "u": "%",
+    "v": 95
+  },
+  {
+    "n": "SignalStrength",
+    "u": "dBm",
+    "v": -65
+  }
+]'
 ```
 
 This command publishes a message to a specific channel. The parameters are similar to the subscribe command, with `-m` specifying the message content in SenML format.
@@ -536,5 +611,5 @@ IIoT, Open Source, IoT Platform, Industrial Automation, Remote Monitoring, MQTT,
 [websocat-repo]: https://github.com/vi/websocat?tab=readme-ov-file#installation
 [drasko]: https://github.com/drasko
 [docs]: https://docs.magistrala.abstractmachines.fr
-[Twitter-handle]: https://x.com/absmach?t=9j4nWw8EKQJ_-IPSPbDY8g&s=09
+[Twitter-handle]: https://x.com/absmach
 [LinkedIn-page]: https://www.linkedin.com/company/abstract-machines/

@@ -26,34 +26,39 @@ In the world of Industrial Internet of Things (IIoT), businesses are always on t
 
 ## Getting Started with Magistrala
 
-Setting up Magistrala is straightforward. With Docker (version 26.0.0 and above) and Go (version 1.21 and above) installed on your system, you can clone the official GitHub repository and have the platform up and running in no time. Here's a quick guide to get you started:
+Setting up Magistrala is straightforward. First, the following are needed:
 
-- Clone the Magistrala repository and navigate to the newly created directory:
+- [Docker](https://docs.docker.com/install/) (version 26.0.0 and above)
+- [Go](https://golang.org/doc/install) (version 1.21 and above)
 
-   ```bash
-   git clone https://github.com/absmach/magistrala.git
-   cd magistrala
-   ```
+With Docker (version 26.0.0 and above) and Go (version 1.21 and above) installed on your system, you clone the official Magistrala GitHub repository and have the platform up and running in no time. Here's a quick guide to get you started:
+
+- From the terminal, clone the Magistrala repository and navigate to the newly created directory:
+
+  ```bash
+  git clone https://github.com/absmach/magistrala.git
+  cd magistrala
+  ```
 
 - Build and install the binaries:
 
-   ```bash
-   make && make install
-   ```
+  ```bash
+  make && make install
+  ```
 
 **Note:** This process will compile the binaries into the `<project_root>/build` directory. If the `$GOBIN` environment variable is set, the binaries will also be copied to the `go/bin` directory.
 
 To start Magistrala Docker services, execute the following command from the project's root directory:
 
-   ```bash
-   make run
-   ```
+```bash
+make run
+```
 
 Magistrala offers multiple interaction options, including a CLI, SDK, HTTP API, and UI, catering to different user preferences and use cases.
 
 ### Using the CLI
 
-Magistrala's Command Line Interface (CLI) provides a powerful way to interact with the platform. There are many commands available through the CLI. For more information, run:
+Magistrala's Command Line Interface (CLI) provides a powerful way to interact with the platform. There are many commands available through the CLI. For more information, refer to the [Magistrala CLI Documentation](https://docs.magistrala.abstractmachines.fr/cli/). To explore available commands and get usage details, run:
 
 ```bash
 magistrala-cli --help
@@ -121,45 +126,56 @@ Here are some basic operations with detailed explanations:
 magistrala-cli users create John johndoe@example.com 12345678
 ```
 
-   This command creates a new user named John with the email `johndoe@example.com` and password `12345678`.
+This command creates a new user named John with the email `johndoe@example.com` and password `12345678`.
 
-- Generate an access token:
+- After creating a user, you need to generate an access token for them. To do so, run:
 
 ```bash
 magistrala-cli users token johndoe@example.com 12345678
 ```
 
-   This generates an access token for the user, which is required for authentication in subsequent operations.
-
-   The access token can be set to an environmental variable to allow for easy use:
+This generates an access token and a refresh token for the created user. The access token is used for authentication in subsequent operations, while the refresh token allows you to generate a new access token when the existing access token expires. For convenience, both tokens can be set as environment variables for easy access:
 
 ```bash
 ACCESSTOKEN=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgxOTI2MTIsImlhdCI6MTcxODE4OTAxMiwiaXNzIjoibWFnaXN0cmFsYS5hdXRoIiwidHlwZSI6MCwidXNlciI6ImMxYjQ3OWQwLWEzNDYtNGZiYy1hN2FkLWVkNGFiNjcxYTIyZCJ9._Qlri9FN_E2vJLZIVQzyeeg9I_ggVRi_CKS52xlUD8YEkSKWkTlmr02WlKdhvR-aZzaDyudICLtCPtadMCGCzg
+
+REFRESHTOKEN=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjU3MDM4NTUsImlhdCI6MTcyNTYxNzQ1NSwiaXNzIjoibWFnaXN0cmFsYS5hdXRoIiwidHlwZSI6MSwidXNlciI6IjM0YzNhMDhjLTBkMzEtNGU3Ny1iNjBlLTA0OTBiOTc5NzQyMSJ9.v9tFiX2NKiykg1SmmwNQrSDlcsNrYp7isF0kqTzyo8wiJuYfvO7GwCKNb1aGPx6uR6_VYGQlfN6aoxAKP_42WQ
 ```
 
-**Note:** The token last for 15 minutes before expiring and will need the user to get a new one.
+**Note:** The access token is valid for 15 minutes before it expires. After this period, the user will need to use the refresh token to obtain a new access token.
 
 - Create a domain (workspace):
 
+After creating a user and generating access and refresh tokens, you need to add the user to a domain to access resources within the platform. To assign the user to a domain, you need to create a domain (workspace) using the following command:
+
 ```bash
-magistrala-cli domain create workspace alias $ACCESSTOKEN
+magistrala-cli domains create workspace alias $ACCESSTOKEN
 ```
 
-   This creates a new domain with the name "workspace" with an alias. The $ACCESSTOKEN is the token generated in the previous step.
+This creates a new domain with the name "workspace" with an alias. The $ACCESSTOKEN is the token generated in the previous step.
 
-Save the domain Id to use it for logging in:
+Save the domain ID in an environment variable `DOMAINID` for ease of use for logging in:
 
 ```bash
 DOMAINID=9a00bc60-2e07-4503-8144-a24e748175d0
 ```
 
-To login into your workspace to generate the token with the domain ID attached:
+To login into the created domain/ workspace, you need to embed the token with the domain ID. Including the domain ID in the token ensures that the token is specific to the domain/workspace, which is essential for managing access and permissions within that particular domain/workspace. To do so, run:
 
 ```bash
 magistrala-cli users token johndoe@example.com 12345678 $DOMAINID
 ```
 
-**Note:** The access token will need to be set to the `ACCESSTOKEN` environmental variable created earlier. While logged into your domain, there are multiple operations that can be done. Let go through some of them.
+Update the `ACCESSTOKEN` and `REFRESHTOKEN` environment variables with the newly generated tokens (token with domain ID attached).
+
+While logged into your domain, you can perform a variety of operations. Some of the key operations include:
+
+- User Management: Manage users within your domain, including creating, updating, and deleting user accounts.
+- Things Management: Manage devices or "things" associated with your domain, including adding, updating, and monitoring their status.
+- Channel Management: Configure and manage channels for data communication within the domain.
+- Domain Management: Handle domain-specific settings and configurations.
+
+For more detailed information on these operations, refer to the [Magistrala CLI Documentation](https://docs.magistrala.abstractmachines.fr/cli/). Let us go through some of the operations.
 
 - Create a thing (device):
 
@@ -193,7 +209,7 @@ magistrala-cli things create '{
 }' $ACCESSTOKEN
 ```
 
-   This creates a new thing named `Distance Sensor` with metadata specifying its units as `centimeters`.
+This creates a new thing named `Distance Sensor` with metadata specifying its units as `centimeters`.
 
 - Create a channel:
 
@@ -215,15 +231,15 @@ magistrala-cli channels create '{
 }' $ACCESSTOKEN
 ```
 
-   This creates a new channel named "Distance" which can be used for communication.
+This creates a new channel named "Distance" which can be used for communication.
 
 - Connect a thing to a channel:
 
 ```bash
-magistrala-cli things connect $THINGID $CHANNELID $ACCESSTOKEN 
+magistrala-cli things connect $THINGID $CHANNELID $ACCESSTOKEN
 ```
 
-   This connects the previously created thing to the channel. $THINGID and $CHANNELID are environment variables used to store the Thing and Channel IDs, similar to how the access token is stored. These IDs are generated when the Thing and Channel are created.
+This connects the previously created thing to the channel. $THINGID and $CHANNELID are environment variables used to store the Thing and Channel IDs, similar to how the access token is stored. These IDs are generated when the Thing and Channel are created.
 
 - Send a message:
 
@@ -231,9 +247,9 @@ magistrala-cli things connect $THINGID $CHANNELID $ACCESSTOKEN
 magistrala-cli messages send $CHANNELID '[{"bn": "DS-5000-AL1-001", "n": "Distance_AssemblyLine1", "u": "mm","v": 152.3}, { "n": "BatteryLevel", "u": "%", "v": 95}, { "n": "SignalStrength", "u": "dBm", "v": -65}]' <thing_secret>
 ```
 
-   This sends a message to the specified channel. The message contains temperature and humidity readings. Replace <thing_secret> with the secret of the thing.
+This sends a message to the specified channel. The message contains temperature and humidity readings. Replace <thing_secret> with the secret of the thing.
 
-**Note:** The secret for the thing can be specified during its creation. If not provided, it will be automatically generated by the platform. To view the generated secret, please access the profile as follows:
+**Note:** The secret for the thing can be specified during its creation. If not provided, it will be automatically generated by the platform. To view the generated secret, please access the thing's profile as follows:
 
 ```bash
 magistrala-cli things get $THINGID $ACCESSTOKEN
@@ -244,10 +260,12 @@ Please note that appropriate access control is required to view the thing's cred
 - Read messages:
 
 ```bash
-magistrala-cli messages read $CHANNELID $ACCESSTOKEN
+magistrala-cli messages read $CHANNELID $ACCESSTOKEN -R <reader_url>
 ```
 
-   This reads messages from the specified channel.
+**Note:** Magistrala implements various message readers that consume magistrala messages. There are five readers that magistrala implements: - InfluxDB Reader - Cassandra Reader - MongoDB Reader - PostgreSQL Reader - Timescale Reader
+
+For more information on how to install and run readers and writers, please refer to the [documentation][storage].
 
 You can also update a Thing's tags, secret, and metadata. Here's an example of how to do that:
 
@@ -255,10 +273,18 @@ You can also update a Thing's tags, secret, and metadata. Here's an example of h
 magistrala-cli things update secret $THINGID $THINGSECRET $ACCESSTOKEN
 ```
 
+**Note:** Make sure to replace `$THINGID`, `$THINGSECRET`, and `$ACCESSTOKEN` with your actual Thing ID, Thing secret, and access token values, respectively.
+
 Within your domain, you have the ability to invite or assign other users as members, guests, contributors, editors, or administrators. This allows you to grant varying levels of permissions to users over different entities. To assign a user to a domain, use the following command:
 
 ```bash
 magistrala-cli domains assign users member '[<user_id>]' $DOMAINID $ACCESSTOKEN
+```
+
+For example:
+
+```bash
+magistrala-cli domains assign users member '["2e8a9cda-5085-45cb-81fe-c9c7b938c25c"]' $DOMAINID $ACCESSTOKEN
 ```
 
 **Note:** Assigning a user adds them automatically to the domain. However, if invited, the user will need to accept the invitation.
@@ -287,7 +313,7 @@ EOF
 
 ```bash
 curl -sSiX POST 'http://localhost:9002/users/tokens/issue' \
--H 'Content-Type: application/json' -d @- << EOF 
+-H 'Content-Type: application/json' -d @- << EOF
 {
   "identity": "john.doe@example.com",
   "secret": "12345678"
@@ -410,7 +436,19 @@ curl --location 'http://localhost/http/channels/aecf0902-816d-4e38-a5b3-a1ad9a7c
 --header 'Authorization: Thing a83b9afb-9022-4f9e-ba3d-4354a08c273a'
 ```
 
-For more information about using HTTP api, refer to the [documentation][swagger-docs] on swagger.
+The `--curl` flag in `magistrala-cli`, provides the equivalent `curl` request that the CLI would execute. This can be helpful for debugging or using the command outside of the CLI. For example, when you create a new user with the following command:
+
+```bash
+magistrala-cli users create john johndoe@example.com 12345678 --curl
+```
+
+You will receive the equivalent curl command:
+
+```bash
+2024/09/06 15:00:30 curl -X 'POST' -d '{"id":"","name":"john","credentials":{"identity":"johndoe@example.com","secret":"12345678"},"created_at":"0001-01-01T00:00:00Z","updated_at":"0001-01-01T00:00:00Z","status":"enabled"}' -H 'Content-Type: application/json' 'http://localhost:9002/users'
+```
+
+The output shows the HTTP request that the CLI would execute, allowing you to copy and paste it for manual execution with `curl`. For more information about using HTTP api, refer to the [documentation][swagger-docs] on swagger.
 
 Note: While the CLI and API endpoints are powerful, they can be more tedious. Many of these tasks can be easily managed through the UI.
 
@@ -450,7 +488,7 @@ Once Mosquitto is installed, you can use it with Magistrala:
 mosquitto_sub -i magistrala -u $THINGID -P $THINGSECRET -t channels/$CHANNELID/messages -h localhost -p 1883
 ```
 
-   This command subscribes to messages on a specific channel. Here's what each part means:
+This command subscribes to messages on a specific channel. Here's what each part means:
 `-i magistrala`: Sets the id-prefix to "magistrala", `-u $THINGID`: Uses the Thing ID as the username, `-P $THINGSECRET`: Uses the Thing secret as the password, `-t channels/$CHANNELID/messages`: Specifies the topic to subscribe to, `-h localhost -p 1883`: Connects to the local MQTT broker on the default port
 
 - Publish a message:
@@ -499,9 +537,9 @@ Once the CoAP CLI is installed, you can use it with Magistrala:
 coap-cli get channels/$CHANNELID/messages --auth $THINGSECRET -o
 ```
 
-   This command retrieves messages from a specific channel. Here's what each part means:
-   `get`: Specifies the GET method, `channels/$CHANNELID/messages`: Specifies the topic,   `--auth $THINGSECRET`: Provides authentication using the Thing secret,
-   `-o`: Enables observing the resource for updates
+This command retrieves messages from a specific channel. Here's what each part means:
+`get`: Specifies the GET method, `channels/$CHANNELID/messages`: Specifies the topic, `--auth $THINGSECRET`: Provides authentication using the Thing secret,
+`-o`: Enables observing the resource for updates
 
 - Publish a message:
 
@@ -577,8 +615,9 @@ We're here to support you in your journey with Magistrala. Whether you have ques
 
 3. **Social Media**:
    Follow us for the latest updates, tips, and news:
-      - Twitter: [Twitter handle][Twitter-handle]
-      - LinkedIn: [LinkedIn page][LinkedIn-page]
+
+   - Twitter: [Twitter handle][Twitter-handle]
+   - LinkedIn: [LinkedIn page][LinkedIn-page]
 
 4. **Professional Services**:
    For enterprise support, custom development, or consulting services, please contact:
@@ -592,6 +631,7 @@ IIoT, Open Source, IoT Platform, Industrial Automation, Remote Monitoring, MQTT,
 
 [architecture]: https://docs.magistrala.abstractmachines.fr/architecture/
 [authorization]: https://docs.magistrala.abstractmachines.fr/authorization/#domain-viewer-with-channel-thing
+[storage]: https://docs.magistrala.abstractmachines.fr/storage/#readers
 [magistrala-repo]: https://github.com/absmach/magistrala
 [mosquitto-site]: https://mosquitto.org/download/
 [swagger-docs]: https://docs.api.magistrala.abstractmachines.fr/

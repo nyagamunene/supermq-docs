@@ -769,3 +769,149 @@ User registration is self register default which can be changed by following env
 ```env
 MG_USERS_ALLOW_SELF_REGISTER=true
 ```
+
+## Personal Access Token(PAT)
+
+Just like the JWT token PATs are used in supermq for authentication and authorization. PATs have the following fields:
+  ID          stores the PAT ID
+	User        Stores the user ID
+	Name        Stores the name given to the PAT
+	Description stores the description of what the PAT is used for
+	Secret      stores the password
+	Scope       This defines the extent of the PAT and what operations the PAT is authorized to do.
+	IssuedAt    This defines the time the PAT was created.
+	ExpiresAt   This defines the time the PAT expires.
+	UpdatedAt   This records the time the PAT was updated.
+	LastUsedAt  This records when the PAT was last used.
+	Revoked     This indicated the status of the PAT either revoked or permitted.
+	RevokedAt   This indicates revoked time.
+
+
+  The scope has the following structure:
+   - Users - This include operations that can be done by the users.
+   - Domains - this includes the entities in the domain ie groups, channels, things and the operations allowed to the scope.
+   - Dashboard - This include operations of sharing the dashboard
+   - Messaging - This include permission to publish and subscribe operation
+
+Here is an example of the scope as a JSON:
+
+```json
+{
+  "users": {
+          "create": ["*"],
+          "read": ["*"],
+          "list": ["*"],
+          "update": ["*"],
+          "delete": ["*"]
+  },
+  "domains": {
+      "domain_1": {
+          "entities": {
+              "groups": {
+                  "create": ["*"] // this for all groups in domain
+              },
+              "channels": {
+                  // for particular channel in domain
+                  "delete": [
+                      "0241e6fe-2113-4731-9cfa-5c74626652b8",
+                  ]
+              },
+              "things": {
+                  "update": ["*"] // this for all things in domain
+              }
+          }
+      }
+  }
+}
+```
+
+SuperMQ exposes accouple of endpoints that allow the user to create,retrieve, update, delete and list pats. 
+Lets use curl to create, retrieve, update and delete pats.
+To create PAT:
+```bash
+curl --location 'http://localhost:9001/pats' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTcwNzgxMzMsImlhdCI6MTcxNzA3NDUzMywiaXNzIjoibWFnaXN0cmFsYS5hdXRoIiwidHlwZSI6MCwidXNlciI6IjE5ZWIzMWU0LWQ0NjUtNDg4OS05MWMwLTc5M2IyZTg3ZTgzNSJ9.VU_Dd7x_0k_5N_FL7wYgRUYQvAltMJMyKs15-9en-D6L0JxQ8OzD_HyYdx95Pfyw2QVvsovsRZQSSUcEfb9lwA' \
+--data '{
+    "name": "steve",
+    "description": "for creating every thing",
+    "duration": "20h",
+    "scope": {
+        "users": {
+            "create": ["*"],
+            "list": ["*"]
+        },
+        "domains": {
+            "0241e6fe-2113-4731-9cfa-5c74626652b8": {
+                "entities": {
+                    "things": {
+                        "create": [
+                            "*"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}'
+```
+
+Expected response:
+```bash
+
+```
+
+To retrieve PAT:
+```bash
+
+```
+
+Expected response:
+```bash
+
+```
+
+To update PAT:
+```bash
+
+```
+
+Expected response:
+```bash
+
+```
+
+To delete PAT:
+```bash
+
+```
+
+Expected response:
+```bash
+
+```
+
+With this lets use the PAT token in platform to create a client and channel and connect them.
+
+Creating a client:
+```bash
+```
+
+creating a channel:
+```bash
+```
+
+conncting both:
+```bash
+```
+
+just like the JWT the PAT tokens are first authenticated identifying if they where issued but the platform. Then the authorization happens checking if the operation requested 
+on the api is supported by the scope. Like on the example pat we are using above the authorization will failing is you use it To
+create a group.
+
+Expected error:
+
+```bash
+
+```
+

@@ -773,19 +773,18 @@ MG_USERS_ALLOW_SELF_REGISTER=true
 ## Personal Access Token(PAT)
 
 Just like the JWT token PATs are used in supermq for authentication and authorization. PATs have the following fields:
-  ID          stores the PAT ID
-	User        Stores the user ID
-	Name        Stores the name given to the PAT
-	Description stores the description of what the PAT is used for
-	Secret      stores the password
-	Scope       This defines the extent of the PAT and what operations the PAT is authorized to do.
-	IssuedAt    This defines the time the PAT was created.
-	ExpiresAt   This defines the time the PAT expires.
-	UpdatedAt   This records the time the PAT was updated.
-	LastUsedAt  This records when the PAT was last used.
-	Revoked     This indicated the status of the PAT either revoked or permitted.
-	RevokedAt   This indicates revoked time.
-
+  - ID: Unique identifier for the token
+  - User: User ID associated with the token
+  - Name: User-defined name for easy identification
+  - Description: Explanation of the token's purpose
+  - Secret: Securely hashed token for authentication
+  - Scope: Defines the precise permissions and access levels
+  - IssuedAt: Timestamp of token creation
+  - ExpiresAt: Timestamp when the token becomes invalid
+  - UpdatedAt: Last modification timestamp
+  - LastUsedAt: Timestamp of most recent token usage
+  - Revoked: Boolean indicating token's active/inactive status
+  - RevokedAt: Timestamp of token revocation
 
   The scope has the following structure:
    - Users - This include operations that can be done by the users.

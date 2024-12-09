@@ -8,7 +8,11 @@ tags: [release, SuperMQ, update]
 
 # What's New in Magistrala v0.14.0
 
-We're thrilled to announce the release of Magistrala v0.14.0, packed with exciting new features and improvements that elevate your experience! This update marks a significant leap forward, making Magistrala even more powerful and versatile. Here are some of the highlights:
+We're thrilled to announce the release of Magistrala v0.14.0, packed with exciting new features and improvements that elevate your experience! This update marks a significant leap forward, making Magistrala even more powerful and versatile. 
+
+<!-- truncate -->
+
+Here are some of the highlights:
 
 - Switched to Google Zanzibar Access control approach with SpiceDB
 - Implemented Domains for access control

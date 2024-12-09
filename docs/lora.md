@@ -92,5 +92,5 @@ To forward LoRa messages the lora-adapter subscribes to topics `applications/+/d
 [lora-gateway]: https://www.loraserver.io/lora-gateway-bridge/overview/
 [semtech]: https://github.com/Lora-net/packet_forwarder/blob/master/PROTOCOL.TXT
 [lora-app-server]: https://www.loraserver.io/lora-app-server/overview/
-[lora-docker-compose]: https://github.com/absmach/supermq/blob/master/docker/addons/lora-adapter/docker-compose.yml
+[lora-docker-compose]: https://github.com/absmach/supermq/blob/main/docker/addons/lora-adapter/docker-compose.yml
 [redis]: https://redis.io/

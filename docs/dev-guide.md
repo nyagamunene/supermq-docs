@@ -283,7 +283,7 @@ Please assure that MQTT microservice has `node_modules` installed, as explained 
 [protobuf]: https://github.com/google/protobuf
 [google-protobuf]: https://google.golang.org/protobuf/proto
 [go-install]: https://golang.org/doc/install
-[mg-ci-scripts]: https://github.com/absmach/supermq/blob/master/scripts/ci.sh
+[mg-ci-scripts]: https://github.com/absmach/supermq/blob/main/scripts/ci.sh
 [scratch-docker]: https://hub.docker.com/_/scratch/
 [cleanup-docker]: #cleaning-up-your-dockerized-supermq-setup
 [docker-compose-ref]: https://docs.docker.com/compose/reference/overview/

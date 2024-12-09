@@ -146,10 +146,10 @@ mosquitto_sub -u <thing_id> -P <thing_secret> --cafile docker/ssl/certs/ca.crt -
 ```
 
 [jwt]: https://jwt.io/
-[messaging]: /messaging/#messaging
+[messaging]: ./messaging.md#messaging
 [rf5280]: https://tools.ietf.org/html/rfc5280
-[ssl-makefile]: https://github.com/absmach/supermq/blob/master/docker/ssl/Makefile
-[provision]: /provision/#platform-management
+[ssl-makefile]: https://github.com/absmach/supermq/blob/main/docker/ssl/Makefile
+[provision]: ./provision.md#platform-management
 [openssl]: https://www.openssl.org/
 [vault]: https://www.vaultproject.io/
 [oidc]: https://openid.net/connect/

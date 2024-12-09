@@ -29,7 +29,7 @@ Agent service has following features:
 
 - Remote execution of commands
 - Remote terminal, remote session to `bash` managed by `Agent`
-- Heartbeat - listening to Message Broker topic `heartbeat.>` it can remotely provide info on running services, if services are publishing heartbeat ( like [Export](/edge/#export))
+- Heartbeat - listening to Message Broker topic `heartbeat.>` it can remotely provide info on running services, if services are publishing heartbeat ( like [Export](./edge.md#export))
 - Proxying commands to other gateway services
 - Edgex SMA - remotely making requests to EdgeX endpoints and fetching results, if EdgeX is deployed.
 
@@ -563,20 +563,20 @@ In SuperMQ `mqtt` service:
 supermq-mqtt   | {"level":"info","message":"Publish - client ID export-88529fb2-6c1e-4b60-b9ab-73b5d89f7404 to the topic: channels/e2adcfa6-96b2-425d-8cd4-ff8cb9c056ce/messages/export/test","ts":"2020-05-08T15:16:02.999684791Z"}
 ```
 
-[agent]: /edge/#agent
-[export]: /edge/#export
-[supermq]: /architecture/
-[bootstrap]: /bootstrap/
-[bootstraping]: /bootstrap/#bootstrapping
-[provision]: /provision/
+[agent]: ./edge.md#agent
+[export]: ./edge.md#export
+[supermq]: ./architecture.md
+[bootstrap]: ./bootstrap.md
+[bootstraping]: ./bootstrap.md#bootstrapping
+[provision]: ./provision.md
 [edgex-repo]: https://github.com/edgexfoundry/edgex-go
 [edgex-raml]: https://github.com/edgexfoundry/edgex-go/blob/master/api/raml/system-agent.raml
 [conftoml]: https://github.com/absmach/export/blob/master/configs/config.toml
 [docker-compose]: https://github.com/absmach/supermq/blob/main/docker/docker-compose.yml
 [env]: https://github.com/absmach/export#environmet-variables
-[mutual-tls]: /authentication/#mutual-tls-authentication-with-x509-certificates
-[certs-service]: /certs/#certs-service
-[protomsg]: https://github.com/absmach/supermq/blob/master/pkg/messaging/message.proto
-[back-to-edge]: /edge/#edge
+[mutual-tls]: ./authentication.md#mutual-tls-authentication-with-x509-certificates
+[certs-service]: ./certs.md#certs-service
+[protomsg]: https://github.com/absmach/supermq/blob/main/pkg/messaging/message.proto
+[back-to-edge]: ./edge.md#edge
 [nats]: https://nats.io/
-[dev-guide]: /dev-guide
+[dev-guide]: ./dev-guide.md

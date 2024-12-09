@@ -255,4 +255,4 @@ supermq-cli bootstrap bootstrap secure '09:6:0:sb:sa' 'key' 'v7aT0HGxJxt2gULzr3R
 
 For more information about the Bootstrap service API, please check out the [API documentation][api-docs].
 
-[api-docs]: https://github.com/absmach/supermq/blob/master/api/openapi/bootstrap.yml
+[api-docs]: https://github.com/absmach/supermq/blob/main/api/openapi/bootstrap.yml

@@ -11,6 +11,8 @@ tags: ['Magistrala', 'IIoT', 'User Guide', 'Industrial Automation', 'Open Source
 
 In the world of Industrial Internet of Things (IIoT), businesses are always on the lookout for reliable, scalable, and secure ways to handle their connected devices and data. That's where Magistrala comes in—an open-source IIoT platform that's transforming the way we approach industrial automation and remote monitoring.
 
+<!-- truncate -->
+
 ## Key Advantages of Magistrala
 
 1. **Protocol Flexibility**: Magistrala's support for multiple protocols ensures that devices with different communication methods can easily connect and interact within the same ecosystem.

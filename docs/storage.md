@@ -250,9 +250,9 @@ To start Timescale reader, execute the following command:
 docker-compose -f docker/addons/timescale-reader/docker-compose.yml up -d
 ```
 
-[subtopic]: /messaging/#subtopics
+[subtopic]: ./messaging.md#subtopics
 [nats-subject]: https://docs.nats.io/nats-concepts/subjects
 [nats-wildcards]: https://docs.nats.io/nats-concepts/subjects#wildcards
-[writers]: /storage/#writers
+[writers]: ./storage.md#writers
 [influxdb]: https://docs.influxdata.com/influxdb
-[readers-api]: https://github.com/absmach/supermq/blob/master/api/readers.yml
+[readers-api]: https://github.com/absmach/supermq/blob/main/api/readers.yml

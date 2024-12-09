@@ -429,7 +429,7 @@ When Unsubscribing from a channel, the reader is closed.
 For more information and examples checkout [official nats.io documentation][nats], [official rabbitmq documentation][rabbitmq], [official vernemq documentation][vernemq] and [official kafka documentation][kafka].
 
 [nats-jestream]: https://docs.nats.io/nats-concepts/jetstream
-[http-api]: https://github.com/absmach/supermq/blob/master/api/openapi/http.yml
+[http-api]: https://github.com/absmach/supermq/blob/main/api/openapi/http.yml
 [mosquitto]: https://mosquitto.org
 [paho]: https://www.eclipse.org/paho/
 [rfc7252]: https://tools.ietf.org/html/rfc7252

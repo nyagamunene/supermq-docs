@@ -170,4 +170,4 @@ This proves that messages have been correctly sent through the system via the pr
 [docker-compose]: https://docs.docker.com/compose/install/
 [mg-releases]: https://github.com/absmach/supermq/releases
 [cli]: cli.md
-[provisioning]: /provision/#platform-management
+[provisioning]: ./provision.md#platform-management

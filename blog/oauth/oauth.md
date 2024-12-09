@@ -11,6 +11,8 @@ tags: ['OAuth2.0', 'Authentication', 'Magistrala', 'Google OAuth']
 
 Over the past months, we have been working on integrating OAuth2.0 with Magistrala. We are happy to announce that we have completed the integration and it is [now available](https://github.com/absmach/magistrala/pull/2103). We believe that this will open up a lot of possibilities for Magistrala and we are very excited about the future of Magistrala. We are planning to add more features to the OAuth2.0 integration in future releases. We are also planning to add support for more OAuth2.0 providers. This will enable users to use their preferred OAuth2.0 provider to authenticate with Magistrala.
 
+<!-- truncate -->
+
 [OAuth2.0](https://datatracker.ietf.org/doc/html/rfc6749) is an authorization framework that facilitates a third-party application to gain restricted access to another HTTP service. This can occur either by mediating an approval process between the resource owner and the HTTP service or by enabling the third-party application to autonomously acquire access. In OAuth2.0, a client requests access to a resource controlled by the resource owner and hosted by the resource server and is issued a different set of credentials than those of the resource owner. Instead of using the resource owner's credentials to access the resource, the client obtains an access token - a string representing the grant issued to the client by the resource owner. The client uses the access token to access the protected resources hosted by the resource server.
 
 In OAuth2.0, there are four roles:

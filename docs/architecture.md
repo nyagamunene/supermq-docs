@@ -65,5 +65,5 @@ Running SuperMQ on gateway moves computation from cloud towards the edge thus de
 [vernemq]: https://vernemq.com/
 [kafka]: https://kafka.apache.org/
 [senml]: https://tools.ietf.org/html/draft-ietf-core-senml-08
-[agent]: /edge/#agent
-[export]: /edge/#export
+[agent]: ./edge.md#agent
+[export]: ./edge.md#export

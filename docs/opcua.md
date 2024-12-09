@@ -119,7 +119,6 @@ Things on SuperMQ can be created to represent these devices and the channels can
 
 [opcua-adapter]: https://github.com/absmach/supermq/tree/main/opcua
 [opcua-arch]: https://en.wikipedia.org/wiki/OPC_Unified_Architecture
-[opcua-diagram]: img/opcua/opcua.png
 [public-opcua]: https://github.com/node-opcua/node-opcua/wiki/publicly-available-OPC-UA-Servers-and-Clients
 [redis]: https://redis.io/
 [open62541]: https://www.open62541.org/doc/master/index.html

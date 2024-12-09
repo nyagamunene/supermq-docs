@@ -27,7 +27,7 @@ const config: Config = {
         docs: {
           sidebarPath: 'sidebars.ts',
           editUrl:
-            'https://github.com/absmach/supermq-docs/blob/master',
+            'https://github.com/absmach/supermq-docs/blob/main',
         },
         blog: {
           showReadingTime: true,
@@ -36,7 +36,7 @@ const config: Config = {
           //   xslt: true,
           // },
           editUrl:
-            'https://github.com/absmach/supermq-docs/blob/master',
+            'https://github.com/absmach/supermq-docs/blob/main',
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -61,7 +61,8 @@ const config: Config = {
       title: 'SuperMQ',
       logo: {
         alt: 'SuperMQ Logo',
-        src: 'img/logo.png',
+        srcDark: 'img/logo-dark.png',
+        src: 'img/logo-light.svg',
       },
       items: [
         {

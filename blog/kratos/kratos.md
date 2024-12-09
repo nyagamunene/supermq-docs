@@ -9,7 +9,11 @@ tags: ['Magistrala', 'Kratos', 'User Management', 'Identity']
 
 # Extending Magistrala Users Repository
 
-For the past few months, we have been working on integrating Magistrala with [Ory Kratos](https://www.ory.sh/docs/kratos/ory-kratos-intro) as the user management service. Ory Kratos is a cloud-native identity and user management system, which can be used as the user management service for Magistrala. Let's delve deeper into the myriad capabilities that Kratos brings to the forefront:
+For the past few months, we have been working on integrating Magistrala with [Ory Kratos](https://www.ory.sh/docs/kratos/ory-kratos-intro) as the user management service. Ory Kratos is a cloud-native identity and user management system, which can be used as the user management service for Magistrala. 
+
+<!-- truncate -->
+
+Let's delve deeper into the myriad capabilities that Kratos brings to the forefront:
 
 - self-service user login and registration. This is the ability to register and log in to the system without the need for an administrator.
 - multi-factor authentication with Time-based One-time Passwords (TOTP).

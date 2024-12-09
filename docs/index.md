@@ -36,8 +36,7 @@ Take a look at our [open issues][open-issues]. The [good-first-issue][good-first
 
 [Apache-2.0][license]
 
-[gopher]: img/gopherBanner.jpg
 [open-issues]: https://github.com/absmach/supermq/issues
 [good-first-issue]: https://github.com/absmach/supermq/labels/good-first-issue
-[contribution-guide]: https://github.com/absmach/supermq/blob/master/CONTRIBUTING.md
-[license]: https://github.com/absmach/supermq/blob/master/LICENSE
+[contribution-guide]: https://github.com/absmach/supermq/blob/main/CONTRIBUTING.md
+[license]: https://github.com/absmach/supermq/blob/main/LICENSE

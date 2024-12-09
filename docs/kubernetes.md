@@ -488,6 +488,6 @@ mosquitto_pub -d -L mqtts://<thing_id>:<thing_secret>@example.com:8883/channels/
 [ingress-yaml]: https://github.com/absmach/devops/blob/master/charts/mainflux/templates/ingress.yaml#L141
 [ingress-controller-args]: https://kubernetes.github.io/ingress-nginx/user-guide/cli-arguments/
 [ingress-controller-tcp-udp]: https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/
-[authentication]: /authentication
+[authentication]: ./authentication.md
 [makefile]: https://github.com/absmach/magistrala/blob/master/docker/ssl/Makefile
 [secrets]: https://github.com/absmach/devops/blob/master/charts/mainflux/secrets/secrets.sh

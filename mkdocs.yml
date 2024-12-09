@@ -4,10 +4,10 @@
 #
 
 copyright: Copyright (c) Abstract Machines
-repo_url: https://github.com/absmach/magistrala
-site_description: Magistrala IoT System
-site_name: Magistrala
-site_url: https://docs.magistrala.abstractmachines.fr
+repo_url: https://github.com/absmach/supermq
+site_description: SuperMQ IoT System
+site_name: SuperMQ
+site_url: https://docs.supermq.abstractmachines.fr
 edit_uri: ""
 theme:
   name: material

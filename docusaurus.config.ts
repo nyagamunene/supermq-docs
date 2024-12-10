@@ -31,10 +31,10 @@ const config: Config = {
         },
         blog: {
           showReadingTime: true,
-          // feedOptions: {
-          //   type: ['rss', 'atom'],
-          //   xslt: true,
-          // },
+          feedOptions: {
+            type: ['rss', 'atom'],
+            xslt: true,
+          },
           editUrl:
             'https://github.com/absmach/supermq-docs/blob/main',
           onInlineTags: 'warn',
@@ -122,7 +122,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Abstract Machines. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Abstract Machines.`,
     },
     prism: {
       theme: prismThemes.github,

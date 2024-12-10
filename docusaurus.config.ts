@@ -62,7 +62,7 @@ const config: Config = {
       logo: {
         alt: 'SuperMQ Logo',
         srcDark: 'img/logo-dark.png',
-        src: 'img/logo-light.svg',
+        src: 'img/logo-light1.png',
       },
       items: [
         {

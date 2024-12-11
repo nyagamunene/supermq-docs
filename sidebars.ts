@@ -25,7 +25,7 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Getting Started',
+      label: 'Quick Start',
       items: [
         {type: 'doc', id: 'getting-started'},
         {type: 'doc', id: 'api'},
@@ -34,7 +34,7 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Developers Guide',
+      label: 'Development Tools',
       items: [
         {type: 'doc', id: 'dev-guide'},
         {type: 'doc', id: 'events'},
@@ -63,7 +63,7 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'SMQ-Contrib Repository',
+      label: 'Extensions',
       items: [
         {type: 'doc', id: 'smq-contrib'},
         {type: 'doc', id: 'lora'},

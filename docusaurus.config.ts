@@ -58,7 +58,6 @@ const config: Config = {
     // Replace with your project's social card - what is a social card?
     // image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'SuperMQ',
       logo: {
         alt: 'SuperMQ Logo',
         srcDark: 'img/logo-dark.png',

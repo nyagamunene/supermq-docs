@@ -1,5 +1,5 @@
 ---
-sidebar_position: 24
+title: SMQ-Contrib Repository
 ---
 
 # SMQ-Contrib Repository

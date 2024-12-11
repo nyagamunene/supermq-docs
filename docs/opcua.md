@@ -1,5 +1,5 @@
 ---
-sidebar_position: 16
+title: OPC-UA
 ---
 
 # OPC-UA

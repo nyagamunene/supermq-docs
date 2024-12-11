@@ -1,5 +1,5 @@
 ---
-sidebar_position: 21
+title: Developer's Guide
 ---
 
 # Developer's guide

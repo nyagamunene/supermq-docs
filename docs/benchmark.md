@@ -1,5 +1,5 @@
 ---
-sidebar_position: 23
+title: Test Spec
 ---
 
 # Test spec

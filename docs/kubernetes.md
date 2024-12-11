@@ -1,5 +1,5 @@
 ---
-sidebar_position: 22
+title: Kubernetes
 ---
 
 # Kubernetes

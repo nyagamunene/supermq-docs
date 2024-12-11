@@ -66,7 +66,7 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'smqSidebar',
           position: 'left',
           label: 'Docs',
         },
@@ -126,7 +126,6 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ['go'],
     },
     typography: {
       fontFamily: 'Inter, sans-serif',

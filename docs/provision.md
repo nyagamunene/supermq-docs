@@ -656,8 +656,8 @@ To provide authentication credentials to the provision service you can pass it i
 
 Additionally, users or API token can be passed in Authorization header, this authentication takes precedence over others.
 
-- `username`, `password` - (`MG_PROVISION_USER`, `MG_PROVISION_PASSWORD` in [.env][env], `MG_user`, `MG_pass` in [config.toml][conftoml]
-- API Key - (`MG_PROVISION_API_KEY` in [.env][env] or [config.toml][conftoml]
+- `username`, `password` - (`SMQ_PROVISION_USER`, `SMQ_PROVISION_PASSWORD` in [.env][env], `SMQ_user`, `SMQ_pass` in [config.toml][conftoml]
+- API Key - (`SMQ_PROVISION_API_KEY` in [.env][env] or [config.toml][conftoml]
 - `Authorization: Bearer Token|ApiKey` - request authorization header containing users token. Check [auth][auth].
 
 ### Running
@@ -667,10 +667,10 @@ Provision service can be run as a standalone or in docker composition as addon t
 Standalone:
 
 ```bash
-MG_PROVISION_BS_SVC_URL=http://localhost:9013/things \
-MG_PROVISION_THINGS_LOCATION=http://localhost:9000 \
-MG_PROVISION_USERS_LOCATION=http://localhost:9002 \
-MG_PROVISION_CONFIG_FILE=docker/addons/provision/configs/config.toml \
+SMQ_PROVISION_BS_SVC_URL=http://localhost:9013/things \
+SMQ_PROVISION_THINGS_LOCATION=http://localhost:9000 \
+SMQ_PROVISION_USERS_LOCATION=http://localhost:9002 \
+SMQ_PROVISION_CONFIG_FILE=docker/addons/provision/configs/config.toml \
 build/supermq-provision
 ```
 
@@ -795,9 +795,8 @@ For more information about the Provision service API, please check out the [API 
 [supermq]: https://github.com/absmach/supermq
 [bootstrap]: https://github.com/absmach/supermq/tree/main/bootstrap
 [agent]: https://github.com/absmach/agent
-[mgui]: https://github.com/absmach/magistrala-ui
 [config]: https://github.com/absmach/supermq/tree/main/provision#configuration
-[env]: https://github.com/absmach/supermq/blob/main/.env
+[env]: https://github.com/absmach/supermq/blob/main/docker/.env
 [conftoml]: https://github.com/absmach/supermq/blob/main/docker/addons/provision/configs/config.toml
 [users]: https://github.com/absmach/supermq/blob/main/users/README.md
 [exp]: https://github.com/absmach/export

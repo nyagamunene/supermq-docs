@@ -28,11 +28,11 @@ Jaeger uses 5 ports within the SuperMQ framework. These ports can be edited in t
 
 | Variable            | Description                                       | Default     |
 | ------------------- | ------------------------------------------------- | ----------- |
-| MG_JAEGER_PORT      | Agent port for compact jaeger.thrift protocol     | 6831        |
-| MG_JAEGER_FRONTEND  | UI port                                           | 16686       |
-| MG_JAEGER_COLLECTOR | Collector for jaeger.thrift directly from clients | 14268       |
-| MG_JAEGER_CONFIGS   | Configuration server                              | 5778        |
-| MG_JAEGER_URL       | Jaeger access from within SuperMQ              | jaeger:6831 |
+| SMQ_JAEGER_PORT      | Agent port for compact jaeger.thrift protocol     | 6831        |
+| SMQ_JAEGER_FRONTEND  | UI port                                           | 16686       |
+| SMQ_JAEGER_COLLECTOR | Collector for jaeger.thrift directly from clients | 14268       |
+| SMQ_JAEGER_CONFIGS   | Configuration server                              | 5778        |
+| SMQ_JAEGER_URL       | Jaeger access from within SuperMQ                 | jaeger:6831 |
 
 ## Message Tracing
 

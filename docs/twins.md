@@ -4,7 +4,7 @@ sidebar_position: 19
 
 # Twins Service
 
-SuperMQ twins service is built on top of the SuperMQ platform. In order to fully understand what follows, be sure to get acquainted with [overall SuperMQ architecture][architecture]._
+SuperMQ twins service is built on top of the SuperMQ platform. In order to fully understand what follows, be sure to get acquainted with [overall SuperMQ architecture][architecture].
 
 ## What is Digital Twin
 
@@ -312,7 +312,7 @@ Every twin and states related operation publishes notifications _via_ the messag
 In order to pick up this notifications, you have to create a SuperMQ channel before you start the twins service and inform the twins service about the channel by means of the environment variable, like this:
 
 ```bash
-export MG_TWINS_CHANNEL_ID=f6894dfe-a7c9-4eef-a614-637ebeea5b4c
+export SMQ_TWINS_CHANNEL_ID=f6894dfe-a7c9-4eef-a614-637ebeea5b4c
 ```
 
 The twins service will use this channel to publish notifications related to twins creation, update, retrieval and deletion. It will also publish notifications related to state saving into the database.
@@ -320,7 +320,7 @@ The twins service will use this channel to publish notifications related to twin
 All notifications will be published on the following message broker subject:
 
 ```txt
-channels.<MG_twins_channel_id>.<optional_subtopic>
+channels.<SMQ_twins_channel_id>.<optional_subtopic>
 ```
 
 where `<optional_subtopic>` is one of the following:

@@ -20,7 +20,7 @@ In order to run these services, core services, as well as the network from the c
 
 ## Writers
 
-Writers provide an implementation of various `message writers`. Message writers are services that consume SuperMQ messages, transform them to desired format and store them in specific data store. The path of the configuration file can be set using the following environment variables: `MG_CASSANDRA_WRITER_CONFIG_PATH`, `MG_POSTGRES_WRITER_CONFIG_PATH`, `MG_INFLUX_WRITER_CONFIG_PATH`, `MG_MONGO_WRITER_CONFIG_PATH` and `MG_TIMESCALE_WRITER_CONFIG_PATH`.
+Writers provide an implementation of various `message writers`. Message writers are services that consume SuperMQ messages, transform them to desired format and store them in specific data store. The path of the configuration file can be set using the following environment variables: `SMQ_CASSANDRA_WRITER_CONFIG_PATH`, `SMQ_POSTGRES_WRITER_CONFIG_PATH`, `SMQ_INFLUX_WRITER_CONFIG_PATH`, `SMQ_MONGO_WRITER_CONFIG_PATH` and `SMQ_TIMESCALE_WRITER_CONFIG_PATH`.
 
 ### Subscriber config
 
@@ -255,4 +255,4 @@ docker-compose -f docker/addons/timescale-reader/docker-compose.yml up -d
 [nats-wildcards]: https://docs.nats.io/nats-concepts/subjects#wildcards
 [writers]: ./storage.md#writers
 [influxdb]: https://docs.influxdata.com/influxdb
-[readers-api]: https://github.com/absmach/supermq/blob/main/api/readers.yml
+[readers-api]: https://github.com/absmach/supermq/blob/main/api/openapi/readers.yml

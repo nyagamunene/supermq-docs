@@ -16,7 +16,7 @@ Certificate service can create certificates in PKI mode - where certificates iss
 
 ### PKI mode
 
-When `MG_CERTS_VAULT_HOST` is set, it is presumed that `Vault` is installed and `certs` service will issue certificates using `Vault` API.
+When `SMQ_CERTS_VAULT_HOST` is set, it is presumed that `Vault` is installed and `certs` service will issue certificates using `Vault` API.
 
 First you'll need to set up `Vault`.
 
@@ -25,10 +25,10 @@ To setup `Vault` follow steps in [Build Your Own Certificate Authority (CA)][vau
 To setup certs service with `Vault` following environment variables must be set:
 
 ```bash
-MG_CERTS_VAULT_HOST=vault-domain.com
-MG_CERTS_VAULT_PKI_PATH=<vault_pki_path>
-MG_CERTS_VAULT_ROLE=<vault_role>
-MG_CERTS_VAULT_TOKEN=<vault_acces_token>
+SMQ_CERTS_VAULT_HOST=vault-domain.com
+SMQ_CERTS_VAULT_PKI_PATH=<vault_pki_path>
+SMQ_CERTS_VAULT_ROLE=<vault_role>
+SMQ_CERTS_VAULT_TOKEN=<vault_acces_token>
 ```
 
 For lab purposes you can use docker-compose and script for setting up PKI in [meodor-vault][meodor-vault].

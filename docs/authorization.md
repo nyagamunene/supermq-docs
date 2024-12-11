@@ -771,5 +771,5 @@ There are two ways to user get registered to SuperMQ, self-register and register
 User registration is self register default which can be changed by following environment variable:
 
 ```env
-MG_USERS_ALLOW_SELF_REGISTER=true
+SMQ_USERS_ALLOW_SELF_REGISTER=true
 ```

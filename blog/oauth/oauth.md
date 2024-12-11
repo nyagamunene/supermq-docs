@@ -66,10 +66,10 @@ Currently, we have implemented the OAuth2.0 authorization code flow with Google 
 
    ```env
    ### Google OAuth2
-   MG_GOOGLE_CLIENT_ID="01234567-8abc0defg7hijklmnopqr23456s78tu9.apps.googleusercontent.com"
-   MG_GOOGLE_CLIENT_SECRET="GOCSPX-_abCDEfG1hIJKl4MnO7pQRSTuvwxyz"
-   MG_GOOGLE_REDIRECT_URL="http://localhost/oauth/callback/google"
-   MG_GOOGLE_STATE="7NN28jSDAg4z"
+   SMQ_GOOGLE_CLIENT_ID="01234567-8abc0defg7hijklmnopqr23456s78tu9.apps.googleusercontent.com"
+   SMQ_GOOGLE_CLIENT_SECRET="GOCSPX-_abCDEfG1hIJKl4MnO7pQRSTuvwxyz"
+   SMQ_GOOGLE_REDIRECT_URL="http://localhost/oauth/callback/google"
+   SMQ_GOOGLE_STATE="7NN28jSDAg4z"
    ```
 
    The state is a secret key that is shared between the client and the server. It is used to prevent CSRF attacks. The state should be a random string and should be kept secret. The state is used to verify the integrity of the response from the authorization server.

@@ -126,7 +126,7 @@ In order to disconnect, the same request should be sent with the value of `state
 
 - *Encrypt the external key.*
 
-First, encrypt the external key of your thing using AES encryption. The encryption key is specified by the `MG_BOOTSTRAP_ENCRYPT_KEY` environment variable. Use a library or utility that supports AES encryption to do this. Here's an example of how to encrypt using Go:
+First, encrypt the external key of your thing using AES encryption. The encryption key is specified by the `SMQ_BOOTSTRAP_ENCRYPT_KEY` environment variable. Use a library or utility that supports AES encryption to do this. Here's an example of how to encrypt using Go:
 
 ```go
 package main
@@ -175,7 +175,7 @@ func main() {
 }
 ```
 
-Replace `<external_key>` and `<crypto_key>` with the thing's external key and `MG_BOOTSTRAP_ENCRYPT_KEY` respectively.
+Replace `<external_key>` and `<crypto_key>` with the thing's external key and `SMQ_BOOTSTRAP_ENCRYPT_KEY` respectively.
 
 - *Make a request to the bootstrap service.*
 

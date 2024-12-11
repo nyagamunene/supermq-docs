@@ -25,22 +25,22 @@ The following actions are supported:
 Federated authentication is a process of authenticating users using external identity providers. SuperMQ supports federated authentication using [OpenID Connect][oidc] protocol. SuperMQ is a resource provider and it uses [Google Identity Platform][google-identity-platform] as an identity provider. To use federated authentication, you need to create a project in Google Cloud Platform and enable Google Identity Platform API. After that, you need to create OAuth 2.0 credentials and configure the consent screen. This can be done by following Google's [documentation][google-identity-platform-docs]. Once you have created OAuth 2.0 credentials, you need to set the following environment variables:
 
 ```bash
-MG_USERS_GOOGLE_CLIENT_ID=985229335584-m2mft8lqbgfn5gfw9ftrm3r2sgu4tsrw.apps.googleusercontent.com
-MG_USERS_GOOGLE_CLIENT_SECRET=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YUIpw
-MG_UI_GOOGLE_REDIRECT_URL=http://localhost/google-callback
-MG_USERS_GOOGLE_STATE=pGXVNhEeKfycuBzk5InlSfMlEU9UrhlkTUOSqhsgDzXP2Y4RsN
-MG_USERS_UI_REDIRECT_URL=http://localhost:9090
+SMQ_USERS_GOOGLE_CLIENT_ID=985229335584-m2mft8lqbgfn5gfw9ftrm3r2sgu4tsrw.apps.googleusercontent.com
+SMQ_USERS_GOOGLE_CLIENT_SECRET=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YUIpw
+SMQ_UI_GOOGLE_REDIRECT_URL=http://localhost/google-callback
+SMQ_USERS_GOOGLE_STATE=pGXVNhEeKfycuBzk5InlSfMlEU9UrhlkTUOSqhsgDzXP2Y4RsN
+SMQ_USERS_UI_REDIRECT_URL=http://localhost:9090
 ```
 
-1. `MG_USERS_GOOGLE_CLIENT_ID` - Google OAuth 2.0 client ID
-2. `MG_USERS_GOOGLE_CLIENT_SECRET` - Google OAuth 2.0 client secret
-3. `MG_UI_GOOGLE_REDIRECT_URL` - Google OAuth 2.0 redirect URL to handle callback after successful authentication. This URL must be registered in the Google Cloud Platform.
-4. `MG_USERS_GOOGLE_STATE` - Random string used to protect against cross-site request forgery attacks.
-5. `MG_USERS_UI_REDIRECT_URL` - URL to redirect user after successful authentication. This can be your SuperMQ UI URL.
+1. `SMQ_USERS_GOOGLE_CLIENT_ID` - Google OAuth 2.0 client ID
+2. `SMQ_USERS_GOOGLE_CLIENT_SECRET` - Google OAuth 2.0 client secret
+3. `SMQ_UI_GOOGLE_REDIRECT_URL` - Google OAuth 2.0 redirect URL to handle callback after successful authentication. This URL must be registered in the Google Cloud Platform.
+4. `SMQ_USERS_GOOGLE_STATE` - Random string used to protect against cross-site request forgery attacks.
+5. `SMQ_USERS_UI_REDIRECT_URL` - URL to redirect user after successful authentication. This can be your SuperMQ UI URL.
 
 SuperMQ handles the authentication callback at `<MG_BASE_URL>/google-callback` endpoint, where `<MG_BASE_URL>` is the base URL of your SuperMQ instance. This endpoint needs to be registered in the Google Cloud Platform and it must match the value of `MG_UI_GOOGLE_REDIRECT_URL` environment variable. If an error occurs, the error message is sent from the backend using a query paramters with the key `error`. The UI will read the error message from the query parameter and display it to the user. When a user signs up, SuperMQ creates a local copy of the user with an ID provided by Google, the name and email address provided by Google and the password is left empty as the user is authenticated using Google, i.e. external user. The user can be created only once, so if the user already exists, the error will be sent to the UI via the error cookie. Finally, the user is redirected to the URL provided in `MG_USERS_UI_REDIRECT_URL` environment variable upon successful authentication. This should be the base URL of your UI.
 
-The `MG_USERS_GOOGLE_CLIENT_ID`, `MG_USERS_GOOGLE_CLIENT_SECRET`, `MG_UI_GOOGLE_REDIRECT_URL` and `MG_USERS_GOOGLE_STATE` environment variables should be the same for the UI and users service. The `MG_USERS_UI_REDIRECT_URL` environment variable should be the URL of your UI which is used to redirect the user after successful authentication.
+The `SMQ_USERS_GOOGLE_CLIENT_ID`, `SMQ_USERS_GOOGLE_CLIENT_SECRET`, `SMQ_UI_GOOGLE_REDIRECT_URL` and `SMQ_USERS_GOOGLE_STATE` environment variables should be the same for the UI and users service. The `SMQ_USERS_UI_REDIRECT_URL` environment variable should be the URL of your UI which is used to redirect the user after successful authentication.
 
 SuperMQ uses the `access_token` provided by Google only to fetch user information which includes user id, name, given name, family name, picture and locale. The `access_token` is not stored in the database and it's not used for any other purpose. The `id_token` is not used as it presents challenges on refreshing it, thus SuperMQ issues its own `access_token` and `refresh_token` stored in the HTTP-only cookie and it's used to authenticate the user in the subsequent requests.
 

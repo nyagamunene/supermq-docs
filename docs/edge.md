@@ -577,6 +577,6 @@ supermq-mqtt   | {"level":"info","message":"Publish - client ID export-88529fb2-
 [mutual-tls]: ./authentication.md#mutual-tls-authentication-with-x509-certificates
 [certs-service]: ./certs.md#certs-service
 [protomsg]: https://github.com/absmach/supermq/blob/main/pkg/messaging/message.proto
-[back-to-edge]: ./edge.md#edge
+[back-to-edge]: ./edge.md
 [nats]: https://nats.io/
 [dev-guide]: ./dev-guide.md

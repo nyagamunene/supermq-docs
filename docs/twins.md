@@ -340,10 +340,10 @@ Normally, you can use the default message broker, NATS, wildcards. In order to l
 
 Since messages published on message broker are republished on any other protocol supported by SuperMQ - HTTP, MQTT, CoAP and WS - you can use any supported protocol client to pick up notifications.
 
-[architecture]: ./architecture.md#architecture
-[provision]: ./provision.md#provision
-[writer]: ./storage.md#writers
+[architecture]: ./architecture.md
+[provision]: ./provision.md
+[writer]: ./storage.md
 [senml]: https://tools.ietf.org/html/rfc8428#section-4.3
-[authentication]: ./authentication.md#authentication
+[authentication]: ./authentication.md
 [twins-api]: https://github.com/absmach/supermq/blob/main/api/openapi/twins.yml
-[messaging]: ./messaging.md#messaging
+[messaging]: ./messaging.md

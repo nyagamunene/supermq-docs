@@ -99,7 +99,7 @@ ws.on("error", (e) => {
 
 ### Basic golang example
 
-```golang
+```go
 package main
 
 import (

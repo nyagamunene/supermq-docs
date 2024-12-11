@@ -11,7 +11,7 @@ Client is a component that will replace and unify the SuperMQ Things and Users s
 
 The client entity is represented by the Client struct in Go. The fields of this struct are as follows:
 
-```golang
+```go
 // Credentials represent client credentials: its
 // "identity" which can be a username, email, generated name;
 // and "secret" which can be a password or access token.

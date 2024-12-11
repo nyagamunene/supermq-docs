@@ -16,7 +16,7 @@ function HomepageHeader() {
           SuperMQ
         </Heading>
         <p className="hero__subtitle">
-          The Scalable, Secure IoT Cloud Platform
+          Event-driven Infrastructure for Modern Cloud
         </p>
         <div className={styles.buttons}>
           <Link

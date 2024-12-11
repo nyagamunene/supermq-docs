@@ -14,7 +14,7 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: "Scalable IoT Middleware",
+    title: "Scalable Messaging Middleware",
 
     Svg: require("@site/static/img/scalability.svg").default,
 

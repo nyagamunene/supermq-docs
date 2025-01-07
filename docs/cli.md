@@ -182,6 +182,8 @@ supermq-cli users create <first_name> <last_name> <user_email> <username> <user_
 For example:
 
 ```bash
+supermq-cli users create John Doe johndoe@example.com johndoe 12345678
+
 supermq-cli users create John Doe johndoe@example.com johndoe 12345678 <token>
 ```
 

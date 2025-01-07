@@ -174,9 +174,9 @@ For "things" service, the response should look like this:
 SuperMQ has two options for user creation. Either the `<user_token>` is provided or not. If the `<user_token>` is provided then the created user will be owned by the user identified by the `<user_token>`. Otherwise, when the token is not used, since everybody can create new users, the user will not have an owner. However, the token is still required, in order to be consistent. For more details, please see [Authorization page](authorization.md).
 
 ```bash
-supermq-cli users create <first_name> <last_name> <user_email> <user_name> <user_password>
+supermq-cli users create <first_name> <last_name> <user_email> <username> <user_password>
 
-supermq-cli users create <first_name> <last_name> <user_email> <user_name> <user_password> <user_token>
+supermq-cli users create <first_name> <last_name> <user_email> <username> <user_password> <user_token>
 ```
 
 #### Login User

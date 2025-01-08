@@ -230,10 +230,10 @@ supermq-cli users update <user_id> '{"name":"value1", "metadata":{"value2": "val
 supermq-cli users update tags <user_id> '["tag1", "tag2"]' <user_token>
 ```
 
-#### Update User Identity
+#### Update User Email
 
 ```bash
-supermq-cli users update identity <user_id> <user_email> <user_token>
+supermq-cli users update email <user_id> <user_email> <user_token>
 ```
 
 #### Update User Owner

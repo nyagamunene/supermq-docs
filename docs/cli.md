@@ -236,12 +236,6 @@ supermq-cli users update tags <user_id> '["tag1", "tag2"]' <user_token>
 supermq-cli users update email <user_id> <user_email> <user_token>
 ```
 
-#### Update User Owner
-
-```bash
-supermq-cli users update owner <user_id> <owner_id> <user_token>
-```
-
 #### Update User Password
 
 ```bash

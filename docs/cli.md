@@ -174,9 +174,17 @@ For "things" service, the response should look like this:
 SuperMQ has two options for user creation. Either the `<user_token>` is provided or not. If the `<user_token>` is provided then the created user will be owned by the user identified by the `<user_token>`. Otherwise, when the token is not used, since everybody can create new users, the user will not have an owner. However, the token is still required, in order to be consistent. For more details, please see [Authorization page](authorization.md).
 
 ```bash
-supermq-cli users create <user_name> <user_email> <user_password>
+supermq-cli users create <first_name> <last_name> <user_email> <username> <user_password>
 
-supermq-cli users create <user_name> <user_email> <user_password> <user_token>
+supermq-cli users create <first_name> <last_name> <user_email> <username> <user_password> <user_token>
+```
+
+For example:
+
+```bash
+supermq-cli users create John Doe johndoe@example.com johndoe 12345678
+
+supermq-cli users create John Doe johndoe@example.com johndoe 12345678 <token>
 ```
 
 #### Login User
@@ -222,16 +230,10 @@ supermq-cli users update <user_id> '{"name":"value1", "metadata":{"value2": "val
 supermq-cli users update tags <user_id> '["tag1", "tag2"]' <user_token>
 ```
 
-#### Update User Identity
+#### Update User Email
 
 ```bash
-supermq-cli users update identity <user_id> <user_email> <user_token>
-```
-
-#### Update User Owner
-
-```bash
-supermq-cli users update owner <user_id> <owner_id> <user_token>
+supermq-cli users update email <user_id> <user_email> <user_token>
 ```
 
 #### Update User Password

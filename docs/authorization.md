@@ -1275,4 +1275,3 @@ the expected is error:
 ## Usage
 
 For more information about API, please check out the [API documentation](https://docs.api.supermq.abstractmachines.fr/?urls.primaryName=auth.yml).
-

@@ -59,11 +59,6 @@ const sidebars: SidebarsConfig = {
       label: 'Certs',
     },
     {
-      type: 'doc',
-      id: 'kubernetes',
-      label: 'Kubernetes',
-    },
-    {
       type: 'category',
       label: 'Extensions',
       items: [

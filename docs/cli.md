@@ -35,6 +35,7 @@ Available Commands:
   groups       Groups management
   health       Health Check
   help         Help about any command
+  invitations  Invitations management
   messages     Send or read messages
   provision    Provision clients and channels from a config file
   subscription Subscription management

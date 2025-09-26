@@ -27,7 +27,6 @@ Usage:
   supermq-cli [command]
 
 Available Commands:
-  bootstrap    Bootstrap management
   certs        Certificates management
   channels     Channels management
   completion   Generate the autocompletion script for the specified shell
@@ -44,27 +43,24 @@ Available Commands:
   users        Users management
 
 Flags:
-  -b, --bootstrap-url string     Bootstrap service URL (default "http://localhost:9013")
   -s, --certs-url string         Certs service URL (default "http://localhost:9019")
   -c, --config string            Config path
   -C, --contact string           Subscription contact query parameter
   -y, --content-type string      Message content type (default "application/senml+json")
-  -d, --domains-url string       Domains service URL (default "http://localhost:8189")
+  -d, --domains-url string       Domains service URL (default "http://localhost:9003")
   -h, --help                     help for supermq-cli
   -H, --host-url string          Host URL (default "http://localhost")
   -p, --http-url string          HTTP adapter URL (default "http://localhost/http")
   -I, --identity string          User identity query parameter
   -i, --insecure                 Do not check for TLS cert
-  -v, --invitations-url string   Inivitations URL (default "http://localhost:9020")
   -l, --limit uint               Limit query parameter (default 10)
   -m, --metadata string          Metadata query parameter
   -n, --name string              Name query parameter
   -o, --offset uint              Offset query parameter
   -r, --raw                      Enables raw output mode for easier parsing of output
   -R, --reader-url string        Reader URL (default "http://localhost")
-  -z, --state string             Bootstrap state query parameter
   -S, --status string            User status query parameter
-  -t, --clients-url string        Clients service URL (default "http://localhost:9000")
+  -t, --clients-url string       Clients service URL (default "http://localhost:9006")
   -T, --topic string             Subscription topic query parameter
   -u, --users-url string         Users service URL (default "http://localhost:9002")
 
@@ -120,26 +116,23 @@ Flags:
   -h, --help   help for channels
 
 Global Flags:
-  -b, --bootstrap-url string     Bootstrap service URL (default "http://localhost:9013")
   -s, --certs-url string         Certs service URL (default "http://localhost:9019")
   -c, --config string            Config path
   -C, --contact string           Subscription contact query parameter
   -y, --content-type string      Message content type (default "application/senml+json")
-  -d, --domains-url string       Domains service URL (default "http://localhost:8189")
+  -d, --domains-url string       Domains service URL (default "http://localhost:9003")
   -H, --host-url string          Host URL (default "http://localhost")
   -p, --http-url string          HTTP adapter URL (default "http://localhost/http")
   -I, --identity string          User identity query parameter
   -i, --insecure                 Do not check for TLS cert
-  -v, --invitations-url string   Inivitations URL (default "http://localhost:9020")
   -l, --limit uint               Limit query parameter (default 10)
   -m, --metadata string          Metadata query parameter
   -n, --name string              Name query parameter
   -o, --offset uint              Offset query parameter
   -r, --raw                      Enables raw output mode for easier parsing of output
   -R, --reader-url string        Reader URL (default "http://localhost")
-  -z, --state string             Bootstrap state query parameter
   -S, --status string            User status query parameter
-  -t, --clients-url string        Clients service URL (default "http://localhost:9000")
+  -t, --clients-url string       Clients service URL (default "http://localhost:9006")
   -T, --topic string             Subscription topic query parameter
   -u, --users-url string         Users service URL (default "http://localhost:9002")
 
@@ -183,7 +176,7 @@ For example:
 ```bash
 supermq-cli users create John Doe johndoe@example.com johndoe 12345678
 
-supermq-cli users create John Doe johndoe@example.com johndoe 12345678 <token>
+supermq-cli users create John Doe johndoe@example.com johndoe 12345678 <user_token>
 ```
 
 #### Login User
@@ -208,49 +201,49 @@ supermq-cli users refreshtoken <refresh_token>
 #### Get User
 
 ```bash
-supermq-cli users get <user_id> <user_token>
+supermq-cli users <user_id> get <user_token>
 ```
 
 #### Get Users
 
 ```bash
-supermq-cli users get all <user_token>
+supermq-cli users all get <user_token>
 ```
 
 #### Update User Metadata
 
 ```bash
-supermq-cli users update <user_id> '{"name":"value1", "metadata":{"value2": "value3"}}' <user_token>
+supermq-cli users <user_id> update '{"name":"value1", "metadata":{"value2": "value3"}}' <user_token>
 ```
 
 #### Update User Tags
 
 ```bash
-supermq-cli users update tags <user_id> '["tag1", "tag2"]' <user_token>
+supermq-cli users <user_id> update tags '["tag1", "tag2"]' <user_token>
 ```
 
 #### Update User Email
 
 ```bash
-supermq-cli users update email <user_id> <user_email> <user_token>
+supermq-cli users <user_id> update email <user_email> <user_token>
 ```
 
 #### Update User Password
 
 ```bash
-supermq-cli users password <old_password> <password> <user_token>
+supermq-cli users password <old_password> <new_password> <user_token>
 ```
 
 #### Enable User
 
 ```bash
-supermq-cli users enable <user_id> <user_token>
+supermq-cli users <user_id> enable <user_token>
 ```
 
 #### Disable User
 
 ```bash
-supermq-cli users disable <user_id> <user_token>
+supermq-cli users <user_id> disable <user_token>
 ```
 
 #### Get Profile of the User identified by the token
@@ -264,61 +257,61 @@ supermq-cli users profile <user_token>
 #### Create Group
 
 ```bash
-supermq-cli groups create '{"name":"<group_name>","description":"<description>","parentID":"<parent_id>","metadata":"<metadata>"}' <user_token>
+supermq-cli groups create '{"name":"<group_name>","description":"<description>","parentID":"<parent_id>","metadata":"<metadata>"}' <domain_id> <user_token>
 ```
 
 #### Get Group
 
 ```bash
-supermq-cli groups get <group_id> <user_token>
+supermq-cli groups <group_id> get <domain_id> <user_token>
 ```
 
 #### Get Groups
 
 ```bash
-supermq-cli groups get all <user_token>
+supermq-cli groups all get <domain_id> <user_token>
 ```
 
 #### Update Group
 
 ```bash
-supermq-cli groups update '{"id":"<group_id>","name":"<group_name>","description":"<description>","metadata":"<metadata>"}' <user_token>
+supermq-cli groups <group_id> update '{"id":"<group_id>","name":"<group_name>","description":"<description>","metadata":"<metadata>"}' <domain_id> <user_token>
 ```
 
 #### Get Group Members
 
 ```bash
-supermq-cli groups members <group_id> <user_token>
+supermq-cli groups <group_id> members <domain_id> <user_token>
 ```
 
 #### Get Memberships
 
 ```bash
-supermq-cli groups membership <member_id> <user_token>
+supermq-cli groups membership <member_id> <domain_id> <user_token>
 ```
 
 #### Assign Members to Group
 
 ```bash
-supermq-cli groups assign <member_ids> <member_type> <group_id> <user_token>
+supermq-cli groups <group_id> assign <member_ids> <member_type> <domain_id> <user_token>
 ```
 
 #### Unassign Members to Group
 
 ```bash
-supermq-cli groups unassign <member_ids> <group_id>  <user_token>
+supermq-cli groups <group_id> unassign <member_ids> <domain_id> <user_token>
 ```
 
 #### Enable Group
 
 ```bash
-supermq-cli groups enable <group_id> <user_token>
+supermq-cli groups <group_id> enable <domain_id> <user_token>
 ```
 
 #### Disable Group
 
 ```bash
-supermq-cli groups disable <group_id> <user_token>
+supermq-cli groups <group_id> disable <domain_id> <user_token>
 ```
 
 ### Domain management
@@ -326,26 +319,26 @@ supermq-cli groups disable <group_id> <user_token>
 #### Creating a New Domain
 
 ```bash
-supermq-cli domains create <domain_name> <domain_alias> <user_token>
+supermq-cli domains <domain_name> create <domain_route> <user_token>
 ```
 
 In this command:
 
 - `<domain_name>` is the name you want to give to the new domain.
-- `<domain_alias>` is the alias for the new domain.
-- `<user_token>` is your user token.
+- `<domain_route>` is the route for the new domain.
+- `<user_token>` is your user authentication token.
 
-Here's an example creating a new domain with the name `mydomain` and the alias `myalias` with the user access token stored in the `ADMIN_ACCESS` environment variable:
+Here's an example creating a new domain with the name `mydomain` and the route `myroute` with the user access token stored in the `ADMIN_ACCESS` environment variable:
 
 ```bash
-supermq-cli domains create "mydomain" "myalias" $ADMIN_ACCESS
+supermq-cli domains "mydomain" create "myroute" $ADMIN_ACCESS
 ```
 
 After running the command, you should see output similar to this:
 
 ```bash
 {
-  "alias": "myalias",
+  "route": "myroute",
   "created_at": "2024-03-27T09:35:03.61728Z",
   "created_by": "f905b21e-3755-4f73-8444-0fd6db6b96e3",
   "id": "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c",
@@ -360,25 +353,25 @@ After running the command, you should see output similar to this:
 For a single domain
 
 ```bash
-supermq-cli domains get <domain_id> <user_token>
+supermq-cli domains <domain_id> get <user_token>
 ```
 
 where:
 
 - `<domain_id>` is the unique identifier of the domain you want to retrieve information about.
-- `<user_token>` is your user token.
+- `<user_token>` is your user authentication token.
 
 For example
 
 ```bash
-supermq-cli domains get "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" $ADMIN_ACCESS
+supermq-cli domains "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" get $ADMIN_ACCESS
 ```
 
-The ouptut should look like
+The output should look like
 
 ```bash
 {
-  "alias": "myalias",
+  "route": "myroute",
   "created_at": "2024-03-27T09:35:03.61728Z",
   "created_by": "f905b21e-3755-4f73-8444-0fd6db6b96e3",
   "id": "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c",
@@ -391,22 +384,22 @@ The ouptut should look like
 For all domains
 
 ```bash
-supermq-cli domains get all <user_token>
+supermq-cli domains all get <user_token>
 ```
 
 For example
 
 ```bash
-supermq-cli domains get all $ADMIN_ACCESS
+supermq-cli domains all get $ADMIN_ACCESS
 ```
 
-After running this command, you will receive information about all domains. The output should look someclient like this:
+After running this command, you will receive information about all domains. The output should look something like this:
 
 ```bash
 {
   "domains": [
     {
-      "alias": "myalias",
+      "route": "myroute",
       "created_at": "2024-03-27T09:35:03.61728Z",
       "created_by": "f905b21e-3755-4f73-8444-0fd6db6b96e3",
       "id": "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c",
@@ -415,7 +408,7 @@ After running this command, you will receive information about all domains. The 
       "updated_at": "0001-01-01T00:00:00Z"
     },
     {
-      "alias": "mydomain",
+      "route": "mydomain",
       "created_at": "2024-03-21T07:57:50.320928Z",
       "created_by": "3d57bf0e-409b-42ee-9adb-abcfb3d4b710",
       "id": "5b6d3cf9-14fc-4283-9ff9-fdd6127ef402",
@@ -434,28 +427,26 @@ After running this command, you will receive information about all domains. The 
 #### Updating Domains
 
 ```bash
-supermq-cli domains update <domain_id> '{"name" : "<new_domain_name>", "alias" : "<new_domain_alias>", "metadata" : "<new_metadata>"}' <user_token>
+supermq-cli domains <domain_id> update '{"name" : "<new_domain_name>", "route" : "<new_domain_route>", "metadata" : "<new_metadata>"}' <user_token>
 ```
 
 In this command:
 
 - `<domain_id>` is the unique identifier of the domain you want to update.
-- `<new_domain_name>` is the new name you want to give to the domain.
-- `<new_domain_alias>` is the new alias for the domain.
-- `<new_metadata>` is the new metadata for the domain.
-- `<user_token>` is your user token.
+- The JSON string contains the new domain properties (name, route, metadata, etc.).
+- `<user_token>` is your user authentication token.
 
-Here's an example in which we're updating the domain with the ID `6fcfec51-423d-4f69-b5c5-1ed1c9ae547c` to have the name `domain_name` instead of `mydomain`, the alias `domain_alias` instead of `myalias`, and adding new metadata `{"location" : "london"}`.
+Here's an example in which we're updating the domain with the ID `6fcfec51-423d-4f69-b5c5-1ed1c9ae547c` to have the name `domain_name` instead of `mydomain`, the route `domain_route` instead of `myroute`, and adding new metadata `{"location" : "london"}`.
 
 ```bash
-supermq-cli domains update "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" '{"name" : "domain_name", "alias" : "domain_alias", "metadata" : {"location" : "london"}}' $ADMIN_ACCESS
+supermq-cli domains "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" update '{"name" : "domain_name", "route" : "domain_route", "metadata" : {"location" : "london"}}' $ADMIN_ACCESS
 ```
 
 After running the command, you should see an output similar to this:
 
 ```bash
 {
-  "alias": "domain_alias",
+  "route": "domain_route",
   "created_at": "2024-03-27T09:35:03.61728Z",
   "created_by": "f905b21e-3755-4f73-8444-0fd6db6b96e3",
   "id": "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c",
@@ -472,66 +463,66 @@ After running the command, you should see an output similar to this:
 #### Disable a domain
 
 ```bash
-supermq-cli domains disable <domain_id> <user_token>
+supermq-cli domains <domain_id> disable <user_token>
 ```
 
 In this command:
 
 - `<domain_id>` is the unique identifier of the domain you want to disable.
-- `<user_token>` is your user token.
+- `<user_token>` is your user authentication token.
 
 For example,
 
 ```bash
-supermq-cli domains disable "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" $ADMIN_ACCESS
+supermq-cli domains "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" disable $ADMIN_ACCESS
 ```
 
 #### Enable a domain
 
 ```bash
-supermq-cli domains enable <domain_id> <user_token>
+supermq-cli domains <domain_id> enable <user_token>
 ```
 
 In this command:
 
 - `<domain_id>` is the unique identifier of the domain you want to enable.
-- `<user_token>` is your user token.
+- `<user_token>` is your user authentication token.
 
 For example,
 
 ```bash
-supermq-cli domains enable "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" $ADMIN_ACCESS
+supermq-cli domains "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" enable $ADMIN_ACCESS
 ```
 
 #### Assigning Users to a Domain
 
 ```bash
-supermq-cli domains assign users <relation> <user_ids> <domain_id> <user_token>
+supermq-cli domains <domain_id> assign users <relation> <user_ids> <user_token>
 ```
 
 In this command:
 
+- `<domain_id>` is the unique identifier of the domain to which you want to assign the users.
 - `<relation>` is the relationship of the user to the domain (for example, 'Administrator', 'Editor', 'Viewer', or 'Member').
 - `<user_ids>` is a list of user IDs that you want to assign to the domain.
-- `<domain_id>` is the unique identifier of the domain to which you want to assign the users.
-- `<user_token>` is your user token.
+- `<user_token>` is your user authentication token.
 
 For example,
 
 ```bash
-supermq-cli domains assign users "member" "6a8c0864-1d95-4053-a335-a6399c0ccb0a" "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" $ADMIN_ACCESS
+supermq-cli domains "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" assign users "member" "6a8c0864-1d95-4053-a335-a6399c0ccb0a" $ADMIN_ACCESS
 ```
 
 #### List Domain users
 
 ```bash
-supermq-cli domains users <domain_id>  <user_token>
+supermq-cli domains <domain_id> users <user_token>
 ```
 
 For example, if your domain ID is `6fcfec51-423d-4f69-b5c5-1ed1c9ae547c` and your user token is stored in the `ADMIN_ACCESS` environment variable, you would type:
 
 ```bash
-supermq-cli domains users "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" $ADMIN_ACCESS
+supermq-cli domains "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" users $ADMIN_ACCESS
 ```
 
 After you run this command, the system will show you a list of users in the domain, like this:
@@ -578,13 +569,13 @@ This output tells you that there are currently 2 users in the domain.
 #### Unassign users from a domain
 
 ```bash
-supermq-cli domains unassign users <relation> <user_ids> <domain_id> <user_token>
+supermq-cli domains <domain_id> unassign users <relation> <user_ids> <user_token>
 ```
 
 For example, if you want to remove a user with the ID `6a8c0864-1d95-4053-a335-a6399c0ccb0a` from a domain with the ID `6fcfec51-423d-4f69-b5c5-1ed1c9ae547c`, and the user is a member of the domain, you would type:
 
 ```bash
-supermq-cli domains unassign users "member" "6a8c0864-1d95-4053-a335-a6399c0ccb0a" "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" $ADMIN_ACCESS
+supermq-cli domains "6fcfec51-423d-4f69-b5c5-1ed1c9ae547c" unassign users "member" "6a8c0864-1d95-4053-a335-a6399c0ccb0a" $ADMIN_ACCESS
 ```
 
 ### Clients management
@@ -592,22 +583,23 @@ supermq-cli domains unassign users "member" "6a8c0864-1d95-4053-a335-a6399c0ccb0
 #### Create Client
 
 ```bash
-supermq-cli clients create '{"name":"myClient"}' <user_token>
+supermq-cli clients create '{"name":"myClient"}' <domain_id> <user_token>
 ```
 
 #### Create Client with metadata
 
 ```bash
-supermq-cli clients create '{"name":"myClient", "metadata": {"key1":"value1"}}' <user_token>
+supermq-cli clients create '{"name":"myClient", "metadata": {"key1":"value1"}}' <domain_id> <user_token>
 ```
 
 #### Bulk Provision Clients
 
 ```bash
-supermq-cli provision clients <file> <user_token>
+supermq-cli provision clients <file> <domain_id> <user_token>
 ```
 
 - `file` - A CSV or JSON file containing client names (must have extension `.csv` or `.json`)
+- `domain_id` - The domain ID where clients will be created
 - `user_token` - A valid user auth token for the current system
 
 An example CSV file might be:
@@ -648,25 +640,25 @@ With JSON you can be able to specify more fields of the channels you want to cre
 #### Update Client
 
 ```bash
-supermq-cli clients update <client_id> '{"name":"value1", "metadata":{"key1": "value2"}}' <user_token>
+supermq-cli clients <client_id> update '{"name":"value1", "metadata":{"key1": "value2"}}' <domain_id> <user_token>
 ```
 
 #### Update Client Tags
 
 ```bash
-supermq-cli clients update tags <client_id> '["tag1", "tag2"]' <user_token>
+supermq-cli clients <client_id> update tags '["tag1", "tag2"]' <domain_id> <user_token>
 ```
 
 #### Update Client Owner
 
 ```bash
-supermq-cli clients update owner <client_id> <owner_id> <user_token>
+supermq-cli clients <client_id> update owner <owner_id> <domain_id> <user_token>
 ```
 
 #### Update Client Secret
 
 ```bash
-supermq-cli clients update secret <client_id> <secet> <user_token>
+supermq-cli clients <client_id> update secret <secret> <domain_id> <user_token>
 ```
 
 #### Identify Client
@@ -678,37 +670,37 @@ supermq-cli clients identify <client_secret>
 #### Enable Client
 
 ```bash
-supermq-cli clients enable <client_id> <user_token>
+supermq-cli clients <client_id> enable <domain_id> <user_token>
 ```
 
 #### Disable Client
 
 ```bash
-supermq-cli clients disable <client_id> <user_token>
+supermq-cli clients <client_id> disable <domain_id> <user_token>
 ```
 
 #### Get Client
 
 ```bash
-supermq-cli clients get <client_id> <user_token>
+supermq-cli clients <client_id> get <domain_id> <user_token>
 ```
 
 #### Get Clients
 
 ```bash
-supermq-cli clients get all <user_token>
+supermq-cli clients all get <domain_id> <user_token>
 ```
 
 #### Get a subset list of provisioned Clients
 
 ```bash
-supermq-cli clients get all --offset=1 --limit=5 <user_token>
+supermq-cli clients all get --offset=1 --limit=5 <domain_id> <user_token>
 ```
 
 #### Share Client
 
 ```bash
-supermq-cli clients share <channel_id> <user_id> <allowed_actions> <user_token>
+supermq-cli clients <client_id> share <user_id> <allowed_actions> <domain_id> <user_token>
 ```
 
 ### Channels management
@@ -716,16 +708,17 @@ supermq-cli clients share <channel_id> <user_id> <allowed_actions> <user_token>
 #### Create Channel
 
 ```bash
-supermq-cli channels create '{"name":"myChannel"}' <user_token>
+supermq-cli channels create '{"name":"myChannel"}' <domain_id> <user_token>
 ```
 
 #### Bulk Provision Channels
 
 ```bash
-supermq-cli provision channels <file> <user_token>
+supermq-cli provision channels <file> <domain_id> <user_token>
 ```
 
 - `file` - A CSV or JSON file containing channel names (must have extension `.csv` or `.json`)
+- `domain_id` - The domain ID where channels will be created
 - `user_token` - A valid user auth token for the current system
 
 An example CSV file might be:
@@ -765,52 +758,53 @@ With JSON you can be able to specify more fields of the channels you want to cre
 #### Update Channel
 
 ```bash
-supermq-cli channels update '{"id":"<channel_id>","name":"myNewName"}' <user_token>
+supermq-cli channels <channel_id> update '{"id":"<channel_id>","name":"myNewName"}' <domain_id> <user_token>
 ```
 
 #### Enable Channel
 
 ```bash
-supermq-cli channels enable <channel_id> <user_token>
+supermq-cli channels <channel_id> enable <domain_id> <user_token>
 ```
 
 #### Disable Channel
 
 ```bash
-supermq-cli channels disable <channel_id> <user_token>
+supermq-cli channels <channel_id> disable <domain_id> <user_token>
 ```
 
 #### Get Channel
 
 ```bash
-supermq-cli channels get <channel_id> <user_token>
+supermq-cli channels <channel_id> get <domain_id> <user_token>
 ```
 
 #### Get Channels
 
 ```bash
-supermq-cli channels get all <user_token>
+supermq-cli channels all get <domain_id> <user_token>
 ```
 
 #### Get a subset list of provisioned Channels
 
 ```bash
-supermq-cli channels get all --offset=1 --limit=5 <user_token>
+supermq-cli channels all get --offset=1 --limit=5 <domain_id> <user_token>
 ```
 
 #### Connect Client to Channel
 
 ```bash
-supermq-cli clients connect <client_id> <channel_id> <user_token>
+supermq-cli clients <client_id> connect <channel_id> <conn_types_json_list> <domain_id> <user_token>
 ```
 
 #### Bulk Connect Clients to Channels
 
 ```bash
-supermq-cli provision connect <file> <user_token>
+supermq-cli provision connect <file> <domain_id> <user_token>
 ```
 
 - `file` - A CSV or JSON file containing client and channel ids (must have extension `.csv` or `.json`)
+- `domain_id` - The domain ID where connections will be made
 - `user_token` - A valid user auth token for the current system
 
 An example CSV file might be
@@ -834,19 +828,19 @@ A comparable JSON file would be
 #### Disconnect Client from Channel
 
 ```bash
-supermq-cli clients disconnect <client_id> <channel_id> <user_token>
+supermq-cli clients <client_id> disconnect <channel_id> <conn_types_json_list> <domain_id> <user_token>
 ```
 
 #### Get a subset list of Channels connected to Client
 
 ```bash
-supermq-cli clients connections <client_id> <user_token>
+supermq-cli clients <client_id> connections <domain_id> <user_token>
 ```
 
 #### Get a subset list of Clients connected to Channel
 
 ```bash
-supermq-cli channels connections <channel_id> <user_token>
+supermq-cli channels <channel_id> connections <domain_id> <user_token>
 ```
 
 ### Messaging
@@ -860,39 +854,7 @@ supermq-cli messages send <channel_id> '[{"bn":"Dev1","n":"temp","v":20}, {"n":"
 #### Read messages over HTTP
 
 ```bash
-supermq-cli messages read <channel_id> <user_token> -R <reader_url>
-```
-
-### Bootstrap
-
-#### Add configuration
-
-```bash
-supermq-cli bootstrap create '{"external_id": "myExtID", "external_key": "myExtKey", "name": "myName", "content": "myContent"}' <user_token> -b <bootstrap-url>
-```
-
-#### View configuration
-
-```bash
-supermq-cli bootstrap get <client_id> <user_token> -b <bootstrap-url>
-```
-
-#### Update configuration
-
-```bash
-supermq-cli bootstrap update '{"supermq_id":"<client_id>", "name": "newName", "content": "newContent"}' <user_token> -b <bootstrap-url>
-```
-
-#### Remove configuration
-
-```bash
-supermq-cli bootstrap remove <client_id> <user_token> -b <bootstrap-url>
-```
-
-#### Bootstrap configuration
-
-```bash
-supermq-cli bootstrap bootstrap <external_id> <external_key> -b <bootstrap-url>
+supermq-cli messages read <channel_id> <domain_id> <user_token> -R <reader_url>
 ```
 
 ## Config
@@ -919,7 +881,6 @@ The possible parameters that can be set using the config command are:
 
 | Flag             | Description                                          | Default                          |
 | ---------------- | ---------------------------------------------------- | -------------------------------- |
-| bootstrap_url    | Bootstrap service URL                                | [bootstrap_url][bootstrap]       |
 | certs_url        | Certs service URL                                    | [certs_url][certs]               |
 | http_adapter_url | HTTP adapter URL                                     | [http_adapter_url][http_adapter] |
 | msg_content_type | Message content type                                 | "application/senml+json"         |
@@ -927,7 +888,7 @@ The possible parameters that can be set using the config command are:
 | clients_url      | Clients service URL                                  | [clients_url][clients]           |
 | tls_verification | Do not check for TLS cert                            |                                  |
 | users_url        | Users service URL                                    | [users_url][users]               |
-| state            | Bootstrap state query parameter                      |                                  |
+| domains_url      | Domains service URL                                  | [domains_url][domains]           |
 | status           | User status query parameter                          |                                  |
 | topic            | Subscription topic query parameter                   |                                  |
 | contact          | Subscription contact query parameter                 |                                  |
@@ -939,9 +900,9 @@ The possible parameters that can be set using the config command are:
 | raw_output       | Enables raw output mode for easier parsing of output |                                  |
 
 [releases]: https://github.com/absmach/supermq/releases
-[bootstrap]: http://localhost:9013
 [certs]: http://localhost:9019
 [http_adapter]: http://localhost/http
 [reader]: http://localhost
 [clients]: http://localhost:9006
-[users]: http://localhost:9005
+[users]: http://localhost:9002
+[domains]: http://localhost:9003
